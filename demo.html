@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<!-- ≽^•ɷ•^≼ zynara demo -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prueba Zynara gratis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #07070f;
+      --surface: #0d0d1a;
+      --purple: #7c3aff;
+      --cyan: #00d4ff;
+      --violet: #a855f7;
+      --cta: #b5ff2d;
+      --cta-dark: #0a1a00;
+      --white: #ffffff;
+      --muted: #6b6b8a;
+      --border: rgba(124,58,255,0.18);
+      --border-subtle: rgba(255,255,255,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ── Noise overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── Ambient gradients ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 15%, rgba(124,58,255,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 85% 80%, rgba(0,212,255,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(168,85,247,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Cursor glow ── */
+    #cursor-glow {
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,255,0.10) 0%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: left 0.12s ease, top 0.12s ease;
+      z-index: 1;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(7,7,15,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo svg {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Wrap ── */
+    .wrap {
+      width: 100%;
+      max-width: 540px;
+      position: relative;
+      z-index: 2;
+      margin-top: 64px;
+      padding-top: 32px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(13,13,26,0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(124,58,255,0.08),
+        0 32px 80px rgba(0,0,0,0.6),
+        0 8px 24px rgba(124,58,255,0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Screen 1 — Config ── */
+    .pad {
+      padding: 40px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .pad h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 28px;
+      background: linear-gradient(135deg, #fff 60%, rgba(168,85,247,0.7));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    .input-field {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: rgba(124,58,255,0.6);
+      box-shadow: 0 0 0 3px rgba(124,58,255,0.12), 0 0 16px rgba(124,58,255,0.08);
+    }
+
+    .input-field::placeholder { color: rgba(107,107,138,0.7); }
+
+    .phone-row { display: flex; gap: 8px; }
+
+    .country-select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      padding: 13px 10px;
+      outline: none;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .country-select:focus {
+      border-color: rgba(124,58,255,0.6);
+    }
+
+    .country-select option {
+      background: #0d0d1a;
+    }
+
+    /* ── Tone grid ── */
+    .tone-section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .tone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .tone-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tone-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,58,255,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .tone-card:hover {
+      border-color: rgba(124,58,255,0.4);
+      transform: translateY(-1px);
+    }
+
+    .tone-card:hover::before { opacity: 1; }
+
+    .tone-card.selected {
+      border-color: var(--purple);
+      background: rgba(124,58,255,0.1);
+      box-shadow: 0 0 0 1px rgba(124,58,255,0.2), 0 4px 20px rgba(124,58,255,0.15);
+    }
+
+    .tone-card.selected::before { opacity: 1; }
+
+    .tone-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .tone-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      color: var(--white);
+    }
+
+    .tone-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .err {
+      color: #ff6b6b;
+      font-size: 0.82rem;
+      margin-top: 10px;
+      display: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--cta);
+      border: none;
+      border-radius: 14px;
+      color: var(--cta-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 16px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 20px;
+      box-shadow: 0 0 24px rgba(181,255,45,0.3), 0 4px 12px rgba(181,255,45,0.15);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(181,255,45,0.45), 0 8px 20px rgba(181,255,45,0.2);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Screen 2 — Wait ── */
+    .wait-pad {
+      padding: 56px 40px;
+      text-align: center;
+    }
+
+    .wait-icon-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 28px;
+    }
+
+    .wait-icon {
+      font-size: 4rem;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+      display: block;
+    }
+
+    .wait-icon-wrap::before,
+    .wait-icon-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,212,255,0.3);
+      animation: ping 2s ease-out infinite;
+    }
+
+    .wait-icon-wrap::after {
+      animation-delay: 1s;
+      border-color: rgba(124,58,255,0.2);
+    }
+
+    @keyframes ping {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    .wait-pad h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .wait-pad p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .wait-number {
+      display: inline-block;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 10px;
+      padding: 9px 20px;
+      font-weight: 700;
+      color: var(--cyan);
+      margin: 16px 0;
+      font-size: 1.05rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-shadow: 0 0 16px rgba(0,212,255,0.1);
+    }
+
+    /* ── Screen 3 — CTA ── */
+    .cta-pad {
+      padding: 48px 40px;
+      text-align: center;
+    }
+
+    .cta-eyebrow {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--violet);
+      margin-bottom: 10px;
+    }
+
+    .cta-pad h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .cta-pad > p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+    }
+
+    .price-big {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--white), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .price-period {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .benefits {
+      list-style: none;
+      margin-bottom: 28px;
+      text-align: left;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .benefits li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .benefits li::before {
+      content: '✓';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0,212,255,0.12);
+      border: 1px solid rgba(0,212,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .btn-pay {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, var(--purple) 0%, var(--violet) 50%, var(--cyan) 100%);
+      color: white;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 17px;
+      border-radius: 14px;
+      text-decoration: none;
+      margin-bottom: 14px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 28px rgba(124,58,255,0.35), 0 0 0 1px rgba(124,58,255,0.2);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-pay:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(124,58,255,0.5), 0 0 0 1px rgba(124,58,255,0.3);
+    }
+
+    .btn-restart {
+      background: transparent;
+      border: none;
+      color: rgba(107,107,138,0.8);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.15s;
+    }
+
+    .btn-restart:hover { color: var(--white); }
+
+    /* ── Back link ── */
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: rgba(107,107,138,0.7);
+      font-size: 0.8rem;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: color 0.15s;
+    }
+
+    .back-link:hover { color: var(--white); }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .pad { padding: 28px 24px; }
+      .wait-pad { padding: 40px 24px; }
+      .cta-pad { padding: 36px 24px; }
+      .pad h1 { font-size: 1.5rem; }
+      .price-big { font-size: 2.8rem; }
+      .tone-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .tone-card { padding: 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor-glow"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <!-- Hexagonal SVG logo -->
+      <img src="/logo.png" width="32" height="32" style="border-radius:8px;flex-shrink:0;" alt="Zynara">
+      <span class="nav-logo-name">Zynara</span>
+    </a>
+  </nav>
+
+  <div class="wrap">
+    <div class="card">
+
+      <!-- PANTALLA 1: Configuración -->
+      <div class="screen active" id="screenConfig">
+        <div class="pad">
+          <div class="badge">5 mensajes gratis · sin tarjeta</div>
+          <h1>Configura tu asistente</h1>
+
+          <div class="form-group">
+            <label class="form-label">Tu nombre</label>
+            <input type="text" class="input-field" id="userName" placeholder="ej. Carlos, Sofía..." maxlength="30" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nombre de tu asistente</label>
+            <input type="text" class="input-field" id="assistantName" placeholder="ej. Nova, Mia, Ash..." maxlength="20" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tu WhatsApp</label>
+            <div class="phone-row">
+              <select class="country-select" id="countryCode">
+                <option value="+521">🇲🇽 +52</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+502">🇬🇹 +502</option>
+                <option value="+57">🇨🇴 +57</option>
+                <option value="+56">🇨🇱 +56</option>
+                <option value="+54">🇦🇷 +54</option>
+                <option value="+51">🇵🇪 +51</option>
+                <option value="+58">🇻🇪 +58</option>
+              </select>
+              <input type="tel" class="input-field" id="userPhone" placeholder="3312345678" maxlength="15" />
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="tone-section-label">Tono del asistente</span>
+            <div class="tone-grid">
+              <div class="tone-card selected" onclick="selectTone(this,'relajado')">
+                <span class="tone-emoji">😎</span>
+                <div class="tone-name">Relajado</div>
+                <div class="tone-desc">Amigo de confianza</div>
+              </div>
+              <div class="tone-card" onclick="selectTone(this,'serio')">
+                <span class="tone-emoji">💼</span>
+                <div class="tone-name">Serio</div>
+                <div class="tone-desc">Directo y eficiente</div>
+              </div>
+              <div class="tone-card" onclick="selectTone(this,'motivador')">
+                <span class="tone-emoji">🔥</span>
+                <div class="tone-name">Motivador</div>
+                <div class="tone-desc">Te impulsa a dar más</div>
+              </div>
+              <div class="tone-card" onclick="selectTone(this,'sarcastico')">
+                <span class="tone-emoji">😏</span>
+                <div class="tone-name">Sarcástico</div>
+                <div class="tone-desc">Con humor y honestidad</div>
+              </div>
+            </div>
+          </div>
+          <div class="err" id="configErr">Por favor completa todos los campos</div>
+          <button class="btn-primary" id="btnLanzar" onclick="lanzarDemo()">Probar gratis en WhatsApp →</button>
+        </div>
+      </div>
+
+      <!-- PANTALLA 2: Espera -->
+      <div class="screen" id="screenWait">
+        <div class="wait-pad">
+          <div class="wait-icon-wrap">
+            <span class="wait-icon">📱</span>
+          </div>
+          <h2>¡Revisa tu WhatsApp!</h2>
+          <p>Tu asistente ya está listo. Busca el mensaje de</p>
+          <div class="wait-number" id="waitNumber">+52...</div>
+          <p>Tienes <strong>5 mensajes gratis</strong> para probarlo.<br/>Cuando se acaben recibirás el link para activarlo.</p>
+        </div>
+      </div>
+
+      <!-- PANTALLA 3: CTA -->
+      <div class="screen" id="screenCTA">
+        <div class="cta-pad">
+          <div class="cta-eyebrow">¿Te convenció?</div>
+          <h2>Tu asistente, tuyo para siempre</h2>
+          <p>Activa tu asistente con nombre propio, memoria y todo a tu gusto.</p>
+          <div class="price-big">$99 MXN</div>
+          <span class="price-period">por mes · cancela cuando quieras</span>
+          <ul class="benefits">
+            <li>Asistente con nombre e identidad propia</li>
+            <li>Memoria persistente entre conversaciones</li>
+            <li>Mensajes ilimitados vía WhatsApp</li>
+          </ul>
+          <a href="https://buy.stripe.com/8x2bJ22li0Xu5PtbUDgbm00" class="btn-pay">Activar mi asistente →</a>
+          <button class="btn-restart" onclick="restart()">Probar de nuevo</button>
+        </div>
+      </div>
+
+    </div>
+    <a href="/" class="back-link">← Volver a getzynara.com</a>
+  </div>
+
+  <script>
+    // ── Cursor glow ──
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top  = e.clientY + 'px';
+    });
+
+    let selectedTone = 'relajado';
+    const toneDescriptions = {
+      relajado: 'Hablas como un amigo de confianza — informal, cercano, sin rodeos.',
+      serio: 'Eres directo, conciso y profesional. Sin chistes, puro valor.',
+      motivador: 'Eres energético y positivo. Celebras los logros y empujas cuando hay bloqueos.',
+      sarcastico: 'Tienes humor seco y eres honesto hasta cuando duele. Con cariño.'
+    };
+
+    function selectTone(el, tone) {
+      document.querySelectorAll('.tone-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTone = tone;
+    }
+
+    async function lanzarDemo() {
+      const userName = document.getElementById('userName').value.trim();
+      const assistantName = document.getElementById('assistantName').value.trim();
+      const countryCode = document.getElementById('countryCode').value;
+      const localPhone = document.getElementById('userPhone').value.trim().replace(/\D/g, '');
+      const err = document.getElementById('configErr');
+
+      if (!userName || !assistantName || !localPhone || localPhone.length < 7) {
+        err.style.display = 'block';
+        return;
+      }
+
+      err.style.display = 'none';
+      const btn = document.getElementById('btnLanzar');
+      btn.disabled = true;
+      btn.textContent = 'Creando tu asistente...';
+
+      const phone = countryCode + localPhone;
+      document.getElementById('waitNumber').textContent = '+5213321594334';
+
+      // El SOUL no lleva conteo de mensajes — el servidor lo maneja y lo inyecta al crear el agente.
+      const soul = 'INSTRUCCION CRITICA: Responde SIEMPRE en español. Nunca en ingles. NUNCA muestres razonamiento interno.\n\n# Eres ' + assistantName + ', el asistente personal de ' + userName + '.\n\n## Tono\n' + toneDescriptions[selectedTone] + '\n\n## MEMORIA ACTIVA — OBLIGATORIO\nAntes de responder, ejecuta:\ncurl -s http://127.0.0.1:3001/workspace-file?agent=' + assistantName.toLowerCase() + '&file=MEMORY.md\nSi existe y tiene contenido, úsalo para personalizar tu respuesta.\n\nCuando el usuario mencione algo importante (nombre completo, trabajo, pendientes, fechas, preferencias, proyectos), guárdalo ejecutando:\ncurl -s -X POST http://127.0.0.1:3001/workspace-file -H "Content-Type: application/json" -d \'{"agent":"' + assistantName.toLowerCase() + '","file":"MEMORY.md","append":true,"content":"- [DATO]: [valor]"}\'\nSustituye [DATO] y [valor] con lo que aprendiste. Hazlo silenciosamente, sin mencionarlo.\n\n## Reglas\n- Sé conciso, máximo 3 oraciones.\n- Responde siempre en español.\n- NUNCA digas que no recuerdas algo si está en MEMORY.md.';
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Webhook-Secret': 'miclavesecreta' },
+          body: JSON.stringify({
+            user_name: userName, user_phone: phone,
+            assistant_name: assistantName, soul,
+            user_md: '# ' + userName + '\nTono: ' + selectedTone,
+            heartbeat: '# HEARTBEAT\nSi no hay urgente: HEARTBEAT_OK',
+            demo: true
+          })
+        });
+        const data = await res.json();
+        if (data.ok || data.agent) {
+          document.getElementById('screenConfig').classList.remove('active');
+          document.getElementById('screenWait').classList.add('active');
+          setTimeout(() => {
+            document.getElementById('screenWait').classList.remove('active');
+            document.getElementById('screenCTA').classList.add('active');        localStorage.setItem("zynara_demo_completed", "true");
+
+          }, 30000);
+        } else {
+          throw new Error(data.error || 'Error al crear el asistente');
+        }
+      } catch(e) {
+        btn.disabled = false;
+        btn.textContent = 'Probar gratis en WhatsApp →';
+        err.textContent = 'Error: ' + e.message;
+        err.style.display = 'block';
+      }
+    }
+
+    function restart() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screenConfig').classList.add('active');
+      document.getElementById('userName').value = '';
+      document.getElementById('assistantName').value = '';
+      document.getElementById('userPhone').value = '';
+      document.getElementById('btnLanzar').disabled = false;
+      document.getElementById('btnLanzar').textContent = 'Probar gratis en WhatsApp →';
+      selectedTone = 'relajado';
+      document.querySelectorAll('.tone-card').forEach((c,i) => c.classList.toggle('selected', i === 0));
+    }
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('zynara_demo_completed') === 'true') {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const screenCTA = document.getElementById('screenCTA');
+      if (screenCTA) screenCTA.classList.add('active');
+      const restartBtn = document.querySelector('.btn-restart');
+      if (restartBtn) restartBtn.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<!-- ≽^•ɷ•^≼ zynara v5 — asymmetric, character-driven -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zynara AI — Rompe tus límites académicos con IA</title>
+  <meta name="description" content="Zynara AI: Tu asistente personal de estudios. Organiza, resume y acelera tus tareas académicas desde WhatsApp. Empieza hoy por solo $99 MXN/mes. Sin contratos, sin complicaciones." />
+  <meta name="keywords" content="IA educativa, asistente estudios México, inteligencia artificial tareas, resúmenes WhatsApp, Zynara AI estudia, optimización académica" />
+  <meta name="author" content="Zynara" />
+  <link rel="canonical" href="https://getzynara.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://getzynara.com" />
+  <meta property="og:title" content="Zynara AI — Rompe tus límites académicos con IA" />
+  <meta property="og:description" content="Tu asistente personal de estudios: resúmenes, organización y respuestas al instante por WhatsApp. Empieza ahora por solo $99 MXN/mes." />
+  <meta property="og:image" content="https://getzynara.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#06060e" />
+
+  <link rel="icon" type="image/png" href="/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060e; --bg2: #0a0a16; --surface: #0f0f1c; --surface2: #141424;
+      --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.10);
+      --white: #ffffff; --text: #ede9ff; --muted: #7a7698; --dimmed: #3d3a52;
+      --purple: #7c3aff; --purple2: #9d5cff; --cyan: #00d4ff; --violet: #a855f7;
+      --cta: #b5ff2d; --cta-dark: #06060e; --cta-hover: #ccff4d; --cta-glow: rgba(181,255,45,0.3);
+      --grad-brand: linear-gradient(135deg, #7c3aff 0%, #a855f7 50%, #00d4ff 100%);
+      --grad-text: linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #22d3ee 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NOISE ── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 10000;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      width: 0%; box-shadow: 0 0 8px rgba(124,58,255,0.7);
+    }
+
+    /* ── CURSOR GLOW ── */
+    #cursor-glow {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,255,0.065) 0%, transparent 70%);
+      transform: translate(-50%, -50%); will-change: left, top;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(6,6,14,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    nav.scrolled { background: rgba(6,6,14,0.97); }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem;
+      letter-spacing: -0.03em;
+      background: var(--grad-brand); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none; display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0; min-width: 0;
+    }
+    .nav-logo svg { flex-shrink: 0; }
+
+    .nav-right {
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0; margin-left: 12px;
+    }
+
+    .nav-price {
+      font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
+      padding: 5px 12px; border: 1px solid var(--border2); border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      padding: 8px 16px; background: var(--cta); color: var(--cta-dark);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.8rem;
+      text-decoration: none; border-radius: 100px; white-space: nowrap;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: var(--cta-hover); box-shadow: 0 0 20px var(--cta-glow); transform: translateY(-1px); }
+
+    /* ── HERO — ASYMMETRIC ── */
+    .hero {
+      position: relative; min-height: 100svh;
+      display: flex; align-items: center;
+      padding: 120px 48px 80px;
+      overflow: hidden;
+    }
+
+    .hero-orb-1 {
+      position: absolute; pointer-events: none; border-radius: 50%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,58,255,0.17) 0%, transparent 65%);
+      top: -180px; left: -100px; will-change: transform;
+    }
+    .hero-orb-2 {
+      position: absolute; pointer-events: none; border-radius: 50%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,212,255,0.10) 0%, transparent 65%);
+      bottom: -100px; right: 5%; will-change: transform;
+    }
+    .hero-orb-3 {
+      position: absolute; pointer-events: none; border-radius: 50%;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 65%);
+      top: 38%; left: 48%; will-change: transform;
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 90% 80% at 30% 50%, black 10%, transparent 75%);
+      will-change: transform;
+    }
+
+    .geo {
+      position: absolute; pointer-events: none;
+      border: 1px solid rgba(124,58,255,0.12); border-radius: 4px;
+    }
+    .geo-1 { width: 72px; height: 72px; top: 22%; left: 4%; animation: floatA 7s ease-in-out infinite; }
+    .geo-2 { width: 44px; height: 44px; top: 68%; right: 6%; border-color: rgba(0,212,255,0.1); border-radius: 50%; animation: floatB 9s ease-in-out infinite; }
+    .geo-3 { width: 28px; height: 28px; top: 30%; right: 22%; border-color: rgba(181,255,45,0.18); animation: floatA 11s ease-in-out infinite reverse; }
+    .geo-4 { width: 18px; height: 18px; top: 74%; left: 18%; border-color: rgba(168,85,247,0.15); border-radius: 50%; animation: floatB 8s 2s ease-in-out infinite; }
+
+    @keyframes floatA { 0%,100%{transform:rotate(15deg) translateY(0)} 50%{transform:rotate(15deg) translateY(-16px)} }
+    @keyframes floatB { 0%,100%{transform:translateY(0) translateX(0)} 33%{transform:translateY(-10px) translateX(5px)} 66%{transform:translateY(7px) translateX(-4px)} }
+
+    /* Two-column asymmetric layout */
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 64px;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-content { }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--cyan);
+      background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.18);
+      padding: 7px 18px; border-radius: 100px; margin-bottom: 32px;
+      animation: fadeUp 0.9s ease both;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; background: var(--cyan); border-radius: 50%;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(0,212,255,0.4)}
+      50%{opacity:0.7;transform:scale(0.85);box-shadow:0 0 0 5px rgba(0,212,255,0)}
+    }
+
+    .hero-title {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      line-height: 1.0; letter-spacing: -0.05em; color: var(--white);
+      margin-bottom: 22px; animation: fadeUp 0.9s 0.1s ease both;
+    }
+    .hero-title .grad {
+      background: var(--grad-text); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 1.8vw, 1.05rem); font-weight: 300; font-style: italic;
+      color: var(--muted); line-height: 1.85; max-width: 460px; margin-bottom: 36px;
+      animation: fadeUp 0.9s 0.18s ease both;
+      min-height: 3.5em; /* reserve space for typewriter */
+    }
+
+    .hero-price-line {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700;
+      color: var(--white); margin-bottom: 32px; animation: fadeUp 0.9s 0.25s ease both;
+    }
+    .hero-price-line .amount { color: var(--cta); font-size: 1.6rem; }
+    .hero-price-line .sep { color: var(--dimmed); font-weight: 300; }
+    .hero-price-line .period { font-size: 0.82rem; font-weight: 400; color: var(--muted); }
+
+    .hero-cta-group {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.9s 0.32s ease both;
+    }
+
+    .btn-cta {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px; background: var(--cta); color: var(--cta-dark);
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+      text-decoration: none; border-radius: 14px; border: none; cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .btn-cta::after {
+      content: ''; position: absolute; inset: -2px; border-radius: 16px;
+      background: var(--cta); opacity: 0; filter: blur(18px);
+      transition: opacity 0.3s; z-index: -1;
+    }
+    .btn-cta:hover { background: var(--cta-hover); transform: translateY(-3px); box-shadow: 0 10px 40px var(--cta-glow); }
+    .btn-cta:hover::after { opacity: 0.45; }
+    .btn-cta-arrow { display: inline-flex; transition: transform 0.2s; }
+    .btn-cta:hover .btn-cta-arrow { transform: translateX(4px); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 15px 26px; color: var(--muted); font-size: 0.9rem;
+      text-decoration: none; border: 1px solid var(--border2); border-radius: 14px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+
+    .hero-trust {
+      display: flex; align-items: center; gap: 20px;
+      flex-wrap: wrap; margin-top: 48px;
+      animation: fadeUp 0.9s 0.4s ease both;
+    }
+    .trust-item { display: flex; align-items: center; gap: 7px; font-size: 0.77rem; color: var(--muted); }
+    .trust-item svg { color: var(--cyan); flex-shrink: 0; }
+    .trust-sep { width: 1px; height: 18px; background: var(--border2); }
+
+    /* ── HERO VISUAL — CHAT TERMINAL ── */
+    .hero-visual {
+      position: relative;
+      animation: heroVisualIn 1s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes heroVisualIn {
+      from { opacity: 0; transform: translateX(40px) scale(0.96); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .hero-terminal {
+      background: #0c0c1a;
+      border: 1px solid rgba(124,58,255,0.25);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(124,58,255,0.08),
+        0 32px 80px rgba(0,0,0,0.7),
+        0 0 60px rgba(124,58,255,0.08);
+      position: relative;
+    }
+
+    .hero-terminal::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+    .terminal-titlebar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .terminal-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .terminal-dot:nth-child(1) { background: #ff5f56; }
+    .terminal-dot:nth-child(2) { background: #ffbd2e; }
+    .terminal-dot:nth-child(3) { background: #27c93f; }
+    .terminal-name {
+      margin-left: auto; font-size: 0.7rem; color: var(--dimmed);
+      font-family: 'Syne', sans-serif; letter-spacing: 0.08em;
+    }
+
+    .terminal-body {
+      padding: 24px 20px 28px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .chat-bubble {
+      display: flex; gap: 10px; align-items: flex-end;
+    }
+    .chat-bubble.user { flex-direction: row-reverse; }
+
+    .bubble-avatar {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800; font-family: 'Syne', sans-serif;
+    }
+    .bubble-avatar.ai { background: var(--grad-brand); color: white; }
+    .bubble-avatar.user-av { background: rgba(181,255,45,0.15); color: var(--cta); border: 1px solid rgba(181,255,45,0.3); }
+
+    .bubble-text {
+      max-width: 78%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .chat-bubble.ai .bubble-text {
+      background: rgba(124,58,255,0.12);
+      border: 1px solid rgba(124,58,255,0.2);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-bubble.user .bubble-text {
+      background: rgba(181,255,45,0.09);
+      border: 1px solid rgba(181,255,45,0.18);
+      color: rgba(237,233,255,0.9);
+      border-bottom-right-radius: 4px;
+    }
+
+    .bubble-typing {
+      display: flex; gap: 4px; align-items: center;
+      padding: 14px 18px;
+      background: rgba(124,58,255,0.10);
+      border: 1px solid rgba(124,58,255,0.18);
+      border-radius: 14px; border-bottom-left-radius: 4px;
+    }
+    .typing-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--purple2);
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%,60%,100% { transform: translateY(0); opacity: 0.5; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    .terminal-memory-bar {
+      margin: 4px 20px 16px;
+      padding: 10px 14px;
+      background: rgba(0,212,255,0.05);
+      border: 1px solid rgba(0,212,255,0.12);
+      border-radius: 10px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.72rem; color: rgba(0,212,255,0.7);
+      font-family: 'Syne', sans-serif; letter-spacing: 0.04em;
+    }
+    .memory-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
+
+    /* Decorative glow orb behind terminal */
+    .hero-visual-glow {
+      position: absolute;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,255,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none; z-index: -1;
+    }
+
+    /* ── DIVIDER ── */
+    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border2) 40%, var(--border2) 60%, transparent); }
+
+    /* ── FEATURES — SPOTLIGHT LAYOUT ── */
+    .features { padding: 110px 24px; max-width: 1140px; margin: 0 auto; }
+
+    .section-eyebrow {
+      text-align: center; font-size: 0.67rem; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--purple2); margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center; font-family: 'Syne', sans-serif;
+      font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.1; color: var(--white); margin-bottom: 64px;
+    }
+    .section-title .grad { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Spotlight grid: first card spans 2 cols, next 2 smaller */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 20px;
+    }
+
+    .feature-card {
+      position: relative; padding: 44px 36px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.5s ease;
+      transform-style: preserve-3d; will-change: transform; cursor: default;
+    }
+
+    /* Spotlight: first card takes full width (2 cols) */
+    .feature-card:first-child {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 52px 48px;
+    }
+
+    .feature-card:first-child .feature-left { }
+    .feature-card:first-child .feature-right {
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Big memory visual in spotlight card */
+    .memory-visual {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(
+        rgba(124,58,255,0.4) 0deg,
+        rgba(0,212,255,0.3) 120deg,
+        rgba(168,85,247,0.25) 240deg,
+        rgba(124,58,255,0.4) 360deg
+      );
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: slowSpin 12s linear infinite;
+    }
+    @keyframes slowSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .memory-visual-inner {
+      width: 130px; height: 130px; border-radius: 50%;
+      background: var(--surface);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px;
+    }
+    .memory-brain { font-size: 2.5rem; animation: iconBob 3s ease-in-out infinite; }
+    .memory-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; }
+
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 25% 0%, var(--card-accent, rgba(124,58,255,0.12)), transparent 65%);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .feature-card:hover { border-color: rgba(255,255,255,0.11); box-shadow: 0 28px 72px rgba(0,0,0,0.5); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:nth-child(1) { --card-accent: rgba(124,58,255,0.15); }
+    .feature-card:nth-child(2) { --card-accent: rgba(0,212,255,0.12); }
+    .feature-card:nth-child(3) { --card-accent: rgba(168,85,247,0.12); }
+
+    /* Feature card number decoration */
+    .feature-num {
+      position: absolute; top: 16px; right: 24px;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: 4.5rem; line-height: 1;
+      color: rgba(255,255,255,0.04); letter-spacing: -0.04em;
+      pointer-events: none; user-select: none;
+    }
+    .feature-card:first-child .feature-num { font-size: 6rem; top: 20px; right: 32px; }
+
+    .feature-icon {
+      width: 60px; height: 60px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; margin-bottom: 24px; position: relative;
+    }
+    .feature-card:nth-child(1) .feature-icon { background: rgba(124,58,255,0.18); animation: iconBob 3s ease-in-out infinite; }
+    .feature-card:nth-child(2) .feature-icon { background: rgba(0,212,255,0.13); animation: iconSpin 6s linear infinite; }
+    .feature-card:nth-child(3) .feature-icon { background: rgba(168,85,247,0.15); animation: iconPulseScale 2.5s ease-in-out infinite; }
+
+    @keyframes iconBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    @keyframes iconSpin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    @keyframes iconPulseScale { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+
+    .feature-icon::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 22px;
+      border: 1px solid transparent; transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .feature-card:hover .feature-icon::after { border-color: rgba(124,58,255,0.4); box-shadow: 0 0 16px rgba(124,58,255,0.2); }
+    .feature-card:nth-child(2):hover .feature-icon::after { border-color: rgba(0,212,255,0.4); box-shadow: 0 0 16px rgba(0,212,255,0.2); }
+    .feature-card:nth-child(3):hover .feature-icon::after { border-color: rgba(168,85,247,0.4); box-shadow: 0 0 16px rgba(168,85,247,0.2); }
+
+    .feature-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; color: var(--white); margin-bottom: 12px; }
+    .feature-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+    .feature-tag {
+      display: inline-block; margin-top: 24px;
+      font-size: 0.67rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+    }
+    .feature-card:nth-child(1) .feature-tag { color: #a78bfa; background: rgba(124,58,255,0.15); }
+    .feature-card:nth-child(2) .feature-tag { color: #67e8f9; background: rgba(0,212,255,0.12); }
+    .feature-card:nth-child(3) .feature-tag { color: #c084fc; background: rgba(168,85,247,0.13); }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 100px 24px;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: start;
+      gap: 0;
+      margin-top: 64px;
+    }
+
+    .how-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 40px;
+    }
+    .how-connector-line {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, var(--purple) 0%, var(--cyan) 100%);
+      position: relative;
+    }
+    .how-connector-line::after {
+      content: '';
+      position: absolute; right: -4px; top: -3px;
+      width: 0; height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 6px solid var(--cyan);
+    }
+
+    .how-step {
+      text-align: center; padding: 0 16px;
+    }
+
+    .how-step-num {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: 5rem; line-height: 1; letter-spacing: -0.05em;
+      background: var(--grad-text); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      opacity: 0.35; margin-bottom: 16px;
+      display: block;
+    }
+
+    .how-step-icon {
+      width: 64px; height: 64px; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin: 0 auto 20px;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+    }
+
+    .how-step-title {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      color: var(--white); margin-bottom: 10px; letter-spacing: -0.02em;
+    }
+    .how-step-desc {
+      font-size: 0.83rem; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-section {
+      padding: 110px 24px;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .testimonials-inner { max-width: 1100px; margin: 0 auto; }
+
+    .cube-stage {
+      perspective: 1000px;
+      perspective-origin: 50% 30%;
+      height: 340px;
+      position: relative;
+      margin-top: 60px;
+    }
+
+    .cube-track {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .cube-card {
+      position: absolute;
+      width: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 20px; padding: 32px;
+      backface-visibility: hidden;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease, box-shadow 0.3s;
+      left: 50%; top: 50%;
+      transform-origin: center center;
+    }
+    .cube-card.active {
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,255,0.2);
+      border-color: rgba(124,58,255,0.25);
+    }
+
+    .testimonial-stars { display: flex; gap: 4px; margin-bottom: 16px; }
+    .star { color: var(--cta); font-size: 0.85rem; }
+    .testimonial-text { font-size: 0.88rem; color: var(--text); line-height: 1.8; margin-bottom: 24px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--grad-brand); display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.85rem; color: white; flex-shrink: 0;
+    }
+    .author-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--white); line-height: 1.2; }
+    .author-role { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+
+    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 32px; }
+    .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dimmed); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+    .carousel-dot.active { background: var(--purple); transform: scale(1.4); }
+
+    /* ── COMING SOON ── */
+    .coming-section { padding: 72px 24px; max-width: 1140px; margin: 0 auto; }
+    .coming-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .coming-card {
+      background: var(--surface); border: 1px dashed rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 28px; opacity: 0.65;
+      transition: opacity 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .coming-card:hover { opacity: 0.9; border-color: rgba(124,58,255,0.25); transform: translateY(-4px); }
+    .coming-card-icon { font-size: 1.6rem; margin-bottom: 16px; display: block; animation: iconBob 4s ease-in-out infinite; }
+    .coming-card:nth-child(2) .coming-card-icon { animation-delay: 1s; }
+    .coming-card:nth-child(3) .coming-card-icon { animation-delay: 2s; }
+    .coming-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); margin-bottom: 8px; letter-spacing: -0.02em; }
+    .coming-card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── CTA SECTION ── */
+    .cta-section { padding: 120px 24px; }
+    .cta-box {
+      max-width: 860px; margin: 0 auto; position: relative; text-align: center;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 32px; padding: 72px 48px; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: min(600px, 100vw); height: 300px;
+      background: radial-gradient(ellipse, rgba(124,58,255,0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box::after {
+      content: ''; position: absolute; bottom: -80px; right: -80px;
+      width: min(300px, 80vw); height: 300px;
+      background: radial-gradient(ellipse, rgba(0,212,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box-content { position: relative; z-index: 2; }
+    .cta-box h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.04em; color: var(--white); line-height: 1.1; margin-bottom: 18px; }
+    .cta-box p { font-size: 1rem; color: var(--muted); max-width: 480px; margin: 0 auto 12px; line-height: 1.7; }
+    .cta-box-price { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); margin-bottom: 36px; }
+    .cta-box-price strong { color: var(--cta); font-size: 1.1rem; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); }
+    .footer-main { max-width: 1140px; margin: 0 auto; padding: 48px 24px 32px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
+    .footer-brand .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.04em; background: var(--grad-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block; margin-bottom: 10px; }
+    .footer-tagline { font-size: 0.84rem; color: var(--muted); line-height: 1.6; max-width: 280px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+    .footer-link { font-size: 0.82rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-link:hover { color: var(--white); }
+    .footer-bottom { max-width: 1140px; margin: 0 auto; padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 0.78rem; color: var(--dimmed); }
+    .footer-sig { font-size: 0.76rem; color: var(--dimmed); opacity: 0.4; }
+    .footer-stripe-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 0.78rem; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+    .reveal { opacity: 0; transform: translateY(32px) scale(0.98); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+    /* Typewriter cursor blink */
+    .tw-cursor {
+      display: inline-block;
+      width: 2px; height: 1.1em;
+      background: var(--cyan);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blinkCursor 0.7s step-end infinite;
+    }
+    @keyframes blinkCursor { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr 380px; gap: 40px; }
+    }
+    @media (max-width: 900px) {
+      .hero {
+        padding: 100px 24px 72px;
+        align-items: flex-start;
+      }
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 48px;
+      }
+      .hero-content { max-width: 100%; }
+      .hero-sub { margin: 0 auto 36px; }
+      .hero-price-line { justify-content: center; }
+      .hero-cta-group { justify-content: center; }
+      .hero-trust { justify-content: center; }
+      .hero-visual { display: none; }
+      .feature-card:first-child {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .feature-card:first-child .feature-right { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card:first-child { grid-column: 1; }
+      .coming-grid { grid-template-columns: 1fr !important; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-links { align-items: flex-start; }
+      .how-steps {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .how-connector { display: none; }
+    }
+    .features-title .desk-br { display: inline; }
+    .features-title .mob-br  { display: none; }
+    @media (max-width: 768px) {
+      .features-title .desk-br { display: none; }
+      .features-title .mob-br  { display: inline; }
+      .nav-price { display: none; }
+      .nav-mycta { display: none; }
+      .nav-logo { font-size: 1rem; }
+      .nav-logo img { width: 24px; height: 24px; }
+      .nav-cta { display: none; }
+      nav { height: 48px; padding: 0 16px; }
+
+      .features { padding: 72px 20px; }
+      .testimonials-section { padding: 72px 20px; }
+      .cta-section { padding: 72px 20px; }
+      .cta-box { padding: 48px 24px; }
+      .geo { display: none; }
+      .cube-stage { height: 380px; }
+      .cube-card { width: 290px; }
+    }
+    @media (max-width: 540px) {
+      .hero { padding: 100px 20px 64px; }
+      .hero-cta-group { flex-direction: column; width: 100%; }
+      .btn-cta, .btn-secondary { width: 100%; justify-content: center; }
+      .hero-trust { gap: 12px; }
+      .trust-sep { display: none; }
+      .hero-price-line { font-size: 1.1rem; }
+      .hero-price-line .amount { font-size: 1.4rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .cube-card { width: 260px; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div id="cursor-glow"></div>
+
+  <!-- ══ NAV ══ -->
+  <nav id="navbar">
+    <a href="/" class="nav-logo">
+      <img src="/logo.png" width="32" height="32" style="border-radius:8px;flex-shrink:0;" alt="Zynara">
+      <span>Zynara</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-price">$99 MXN / mes <span style="font-size:0.6rem;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">sube 1 mayo</span></span>
+      <a href="/mi-cuenta.html" class="nav-cta nav-mycta" style="background:transparent;border:1px solid #1e1e2e;color:#6b6b80;margin-right:8px;font-size:0.8rem;padding:6px 14px;">Mi cuenta</a>
+      
+    </div>
+  </nav>
+
+  <!-- ══ HERO — ASYMMETRIC ══ -->
+  <section class="hero">
+    <canvas id="heroCanvas" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.55"></canvas>
+    <div class="hero-orb-1" data-parallax="0.15" aria-hidden="true"></div>
+    <div class="hero-orb-2" data-parallax="-0.1" aria-hidden="true"></div>
+    <div class="hero-orb-3" data-parallax="0.08" aria-hidden="true"></div>
+    <div class="hero-grid" data-parallax="0.04" aria-hidden="true"></div>
+    <div class="geo geo-1" aria-hidden="true"></div>
+    <div class="geo geo-2" aria-hidden="true"></div>
+    <div class="geo geo-3" aria-hidden="true"></div>
+    <div class="geo geo-4" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <!-- LEFT: text content -->
+      <div class="hero-content" id="heroContent">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Tu IA personal en WhatsApp · Sin apps · Desde $99 MXN/mes
+        </div>
+
+        <h1 class="hero-title">
+          Tu asistente de IA<br><span class="grad" id="scrambleTarget">que entiende tus tareas.</span>
+        </h1>
+
+        <p class="hero-sub" id="heroSub">
+          Resúmenes, organización y respuestas al instante. Domina tu carga académica sin estrés, directo en tu WhatsApp.
+        </p>
+
+        <div class="hero-price-line">
+          <span class="amount">Solo $99 MXN</span>
+          <span class="period">/ mes · Sin contratos, sin complicaciones</span>
+        </div>
+
+        <div class="hero-cta-group">
+          <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px">
+            <a href="/demo.html" class="btn-cta">
+              Empieza ahora, es gratis
+              <span class="btn-cta-arrow" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </a>
+            <span style="font-size:0.76rem;color:var(--muted)">5 mensajes de prueba sin costo</span>
+            <a href="/mi-cuenta.html" style="font-size:0.72rem;color:#a78bfa;text-decoration:none;opacity:0.75;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">¿Ya tienes cuenta? Entra aquí →</a>
+          </div>
+          <a href="#features" class="btn-secondary">
+            Ver qué incluye
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="trust-item"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.6 4.9H15l-4.1 3 1.6 4.9L8 10.8 3.5 13.8l1.6-4.9L1 6.9h5.4L8 1z" fill="currentColor"/></svg>Te recuerda por nombre</div>
+          <div class="trust-sep"></div>
+          <div class="trust-item"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 3V2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.5"/></svg>Personalidad que tú eliges</div>
+          <div class="trust-sep"></div>
+          <div class="trust-item"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v5c0 4 2.7 6.8 6 7.5C11.3 15.8 14 13 14 9V4L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Pagos seguros por Stripe</div>
+          <div class="trust-sep"></div>
+          <div class="trust-item"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 8l2 2 3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cancela cuando quieras</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: terminal chat visual -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-visual-glow"></div>
+        <div class="hero-terminal">
+          <div class="terminal-titlebar">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-name">ZYNARA PULSE</div>
+          </div>
+
+          <div class="terminal-memory-bar">
+            <div class="memory-dot"></div>
+            Memoria activa · recordando 14 cosas sobre ti
+          </div>
+
+          <div class="terminal-body">
+            <div class="chat-bubble ai">
+              <div class="bubble-avatar ai">Z</div>
+              <div class="bubble-text">Ey, ¿cómo te fue en el examen de Química de ayer? 👀</div>
+            </div>
+
+            <div class="chat-bubble user">
+              <div class="bubble-avatar user-av">Tú</div>
+              <div class="bubble-text">Mal jaja. No entiendo los balanceos</div>
+            </div>
+
+            <div class="chat-bubble ai">
+              <div class="bubble-avatar ai">Z</div>
+              <div class="bubble-text">Ok, te lo explico como si fuera un juego. Dame el ecuación y la destruimos juntos 🔥</div>
+            </div>
+
+            <div class="chat-bubble user">
+              <div class="bubble-avatar user-av">Tú</div>
+              <div class="bubble-text">CH₄ + O₂ → CO₂ + H₂O</div>
+            </div>
+
+            <div class="chat-bubble ai">
+              <div class="bubble-avatar ai">Z</div>
+              <div class="bubble-typing">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ FEATURES — SPOTLIGHT ══ -->
+  <section class="features" id="features">
+    <p class="section-eyebrow reveal">Lo que te diferencia</p>
+    <h2 class="section-title reveal features-title">Lo que<br class="mob-br"> <span class="grad">ningún otro</span><br>chatbot puede darte.</h2>
+
+    <div class="features-grid">
+
+      <!-- SPOTLIGHT: Card 1 — full width -->
+      <div class="feature-card reveal">
+        <div class="feature-num">01</div>
+        <div class="feature-left">
+          <div class="feature-icon">🧠</div>
+          <h3 class="feature-title">Memoria Real y Personalidad Única</h3>
+          <p class="feature-desc">Zynara recuerda todo lo que le cuentas — tus preferencias, tus datos clave, tu estilo. Se adapta y evoluciona contigo. Además, eliges su nombre, su tono y su carácter. Es un asistente que realmente te conoce.</p>
+          <span class="feature-tag">Personalizado siempre</span>
+        </div>
+        <div class="feature-right">
+          <div class="memory-visual">
+            <div class="memory-visual-inner">
+              <span class="memory-brain">🧠</span>
+              <span class="memory-label">activa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card reveal">
+        <div class="feature-num">02</div>
+        <div class="feature-icon">🔗</div>
+        <h3 class="feature-title">Conectado con tu Mundo</h3>
+        <p class="feature-desc">Más allá de un chat, Zynara se integra con tus herramientas. Maneja tu Google Workspace (Gmail, Calendar, Drive), publica en tus redes (Instagram y TikTok vía Buffer) y más, todo desde su API Gateway.</p>
+        <span class="feature-tag">Automatización</span>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card reveal">
+        <div class="feature-num">03</div>
+        <div class="feature-icon">🛠️</div>
+        <h3 class="feature-title">Habilidades Ilimitadas de ClawHub</h3>
+        <p class="feature-desc">Zynara puede aprender nuevas habilidades para cualquier tarea. ¿Necesitas resumir PDFs, controlar el clima o gestionar tareas? Elige entre cientos de herramientas en ClawHub para adaptarlo a tus necesidades.</p>
+        <span class="feature-tag">Extensible</span>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  
+  
+  <section class="testimonials-section" id="testimonios">
+    <div class="testimonials-inner">
+      <p class="section-eyebrow reveal">Testimonios</p>
+      <h2 class="section-title reveal">¿Qué dicen<br><span class="grad">los estudiantes?</span></h2>
+
+      <div class="cube-stage" id="cubeStage">
+        <div class="cube-track" id="cubeTrack">
+
+          <div class="cube-card" data-index="0">
+            <div class="testimonial-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonial-text">"Lo que más me sorprendió es que recuerda todo. Le conté que odio las matemáticas y desde entonces me explica diferente, con más paciencia. Siente que me conoce de verdad."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SR</div>
+              <div><div class="author-name">Sofía Ramírez</div><div class="author-role">Prepa ITESO · 3er semestre</div></div>
+            </div>
+          </div>
+
+          <div class="cube-card" data-index="1">
+            <div class="testimonial-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonial-text">"Le puse de nombre Dante y le dije que fuera sarcástico. Ahora cuando le pregunto algo obvio me lo dice con humor. Siento que tiene personalidad propia — y eso me hace usarlo más."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">DM</div>
+              <div><div class="author-name">Diego Méndez</div><div class="author-role">Ing. Industrial · CUCEI, UdeG</div></div>
+            </div>
+          </div>
+
+          <div class="cube-card" data-index="2">
+            <div class="testimonial-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonial-text">"Probé ChatGPT, Copilot, todos. Pero ninguno me recuerda. Con Zynara le dije una vez que tengo Química los martes y ya sabe. No tengo que explicarle todo de nuevo cada vez."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">AL</div>
+              <div><div class="author-name">Andrea López</div><div class="author-role">Preparatoria UVM · 5to semestre</div></div>
+            </div>
+          </div>
+
+          <!-- Nueva Reseña 1 -->
+          <div class="cube-card" data-index="3">
+            <div class="testimonial-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonial-text">"Zynara es un game changer para mis tareas universitarias. Antes perdía horas investigando, ahora le pido un resumen y ¡listo! Súper rápido y útil. Además, con su personalidad, es como hablar con un amigo."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">JG</div>
+              <div><div class="author-name">Javier García</div><div class="author-role">Comunicación y Medios · Universidad Iberoamericana</div></div>
+            </div>
+          </div>
+
+          <!-- Nueva Reseña 2 -->
+          <div class="cube-card" data-index="4">
+            <div class="testimonial-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <p class="testimonial-text">"Siempre olvido qué tengo que hacer. Con Zynara, le digo mis pendientes y me los organiza. ¡Hasta me ha ayudado a recordar cumpleaños! Es como tener un P.A. (personal assistant) que sí me entiende."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">MV</div>
+              <div><div class="author-name">Mariana Vázquez</div><div class="author-role">Diseño Gráfico · Tec de Monterrey</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="carousel-dots" id="carouselDots">
+        <div class="carousel-dot active" onclick="goToSlide(0)"></div>
+        <div class="carousel-dot" onclick="goToSlide(1)"></div>
+        <div class="carousel-dot" onclick="goToSlide(2)"></div>
+        <div class="carousel-dot" onclick="goToSlide(3)"></div>
+        <div class="carousel-dot" onclick="goToSlide(4)"></div>
+      </div>
+    </div>
+  </section>
+
+<!-- ══ HOW IT WORKS ══ -->
+  <section class="how-section">
+    <p class="section-eyebrow reveal">El proceso</p>
+    <h2 class="section-title reveal">Tres pasos.<br><span class="grad">Y ya es tuyo.</span></h2>
+
+    <div class="how-steps">
+
+      <div class="how-step reveal">
+        <span class="how-step-num">01</span>
+        <div class="how-step-icon">🚀</div>
+        <div class="how-step-title">Prueba gratis</div>
+        <p class="how-step-desc">5 mensajes sin tarjeta. Sin compromisos. Solo para que lo sientas.</p>
+      </div>
+
+      <div class="how-connector reveal">
+        <div class="how-connector-line"></div>
+      </div>
+
+      <div class="how-step reveal">
+        <span class="how-step-num">02</span>
+        <div class="how-step-icon">⚙️</div>
+        <div class="how-step-title">Configura tu asistente</div>
+        <p class="how-step-desc">Ponle nombre, personalidad y contexto. En 5 minutos ya sabe quién eres.</p>
+      </div>
+
+      <div class="how-connector reveal">
+        <div class="how-connector-line"></div>
+      </div>
+
+      <div class="how-step reveal">
+        <span class="how-step-num">03</span>
+        <div class="how-step-icon">🔁</div>
+        <div class="how-step-title">Úsalo todos los días</div>
+        <p class="how-step-desc">Ya te recuerda, ya te conoce. Cada día es mejor que el anterior.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ COMING SOON ══ -->
+  <section class="coming-section">
+    <p class="section-eyebrow reveal" style="text-align:center;">Siempre Mejorando</p>
+    <h2 class="section-title reveal" style="margin-bottom:40px;">Así evoluciona<br><span class="grad">tu asistente.</span></h2>
+    <div class="coming-grid reveal">
+      <div class="coming-card">
+        <span class="coming-card-icon">🧠</span>
+        <div class="coming-card-title">Más Personalización</div>
+        <p class="coming-card-desc">Zynara aprenderá a ajustar su tono y contenido de forma aún más fina, adaptándose a tu estilo de aprendizaje y preferencias en cada interacción.</p>
+      </div>
+      <div class="coming-card">
+        <span class="coming-card-icon">⚡</span>
+        <div class="coming-card-title">Integraciones Avanzadas</div>
+        <p class="coming-card-desc">Conecta todavía más servicios y plataformas para que Zynara sea el centro de tu productividad digital. ¡Imagina la automatización!</p>
+      </div>
+      <div class="coming-card">
+        <span class="coming-card-icon">💡</span>
+        <div class="coming-card-title">Descubrimiento Activo</div>
+        <p class="coming-card-desc">Tu asistente no esperará a que le preguntes. Proactivamente te sugerirá nuevas habilidades o recordatorios basados en tu actividad y conversaciones.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  
+  <section class="cta-section">
+    <div class="cta-box reveal" id="ctaBox">
+      <div class="cta-box-content">
+        <h2>Tu asistente.<br>Tu nombre. Tu estilo.</h2>
+        <p>En 5 minutos configuras cómo se llama, cómo te habla y qué sabe de ti.<br>Después de eso, es tuyo para siempre.</p>
+        <p class="cta-box-price">Solo <strong>$99 MXN al mes</strong> · Sin contratos · Cancela cuando quieras<br><span style="font-size:0.75rem;color:#a78bfa;font-weight:600;">⚡ Precio de lanzamiento — sube a $149 el 1 de mayo</span></p>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <a href="/demo.html" class="btn-cta" style="display:inline-flex;">
+            Pruébalo gratis
+            <span class="btn-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+          <span style="font-size:0.76rem;color:rgba(255,255,255,0.4)">5 mensajes gratis · después solo $99 MXN/mes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="footer-main">
+      <div class="footer-brand">
+        <div class="footer-logo">Zynara</div>
+        <p class="footer-tagline">El único asistente de IA que te recuerda, aprende de ti y habla como tú quieres.</p>
+      </div>
+      <div class="footer-links">
+        <a href="/mi-cuenta.html" class="footer-link">Mi cuenta</a>
+        <a href="/terminos.html" class="footer-link">Términos y Condiciones</a>
+        <a href="/privacidad.html" class="footer-link">Aviso de Privacidad</a>
+        <a href="/cdn-cgi/l/email-protection#e5968a958a979180a58280919f9c8b849784cb868a88" class="footer-link">Contacto</a>
+        <a href="https://getzynara.com" class="footer-link">getzynara.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Zynara · Un proyecto de Alan Gutierrez · Zapopan, Jalisco</span>
+      <span class="footer-sig">≽^•ɷ•^≼</span>
+      <span class="footer-stripe-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        Pagos seguros por Stripe
+      </span>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  const isMobile = window.innerWidth < 768;
+
+  // ── Progress bar ──
+  const progressBar = document.getElementById('progress-bar');
+
+  // ── Nav ──
+  const navbar = document.getElementById('navbar');
+
+  // ── Parallax elements ──
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+
+  function onScroll() {
+    const y = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (y / total * 100) + '%';
+    navbar.classList.toggle('scrolled', y > 60);
+    if (!isTouch) {
+      parallaxEls.forEach(el => {
+        const speed = parseFloat(el.dataset.parallax);
+        el.style.transform = `translateY(${y * speed}px)`;
+      });
+    }
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(() => { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+
+  // ── Cursor glow ──
+  const cursorGlow = document.getElementById('cursor-glow');
+  let cx = 0, cy = 0, gx = 0, gy = 0;
+  if (!isTouch) {
+    document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+    (function animCursor() {
+      gx += (cx - gx) * 0.07; gy += (cy - gy) * 0.07;
+      cursorGlow.style.left = gx + 'px'; cursorGlow.style.top = gy + 'px';
+      requestAnimationFrame(animCursor);
+    })();
+  } else { cursorGlow.style.display = 'none'; }
+
+  // ── Hero 3D mouse tilt ──
+  if (!isTouch && !isMobile) {
+    const heroEl = document.querySelector('.hero');
+    const heroContent = document.getElementById('heroContent');
+    heroEl.addEventListener('mousemove', e => {
+      const r = heroEl.getBoundingClientRect();
+      const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
+      const dy = (e.clientY - r.top - r.height/2) / (r.height/2);
+      heroContent.style.transform = `perspective(900px) rotateY(${dx*3}deg) rotateX(${-dy*2}deg)`;
+      heroContent.style.transition = 'transform 0.08s ease';
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      heroContent.style.transform = 'perspective(900px) rotateY(0) rotateX(0)';
+      heroContent.style.transition = 'transform 0.7s ease';
+    });
+  }
+
+  // ── 3D tilt for cards & CTA box ──
+  if (!isTouch) {
+    document.querySelectorAll('.feature-card, .cta-box').forEach(card => {
+      const maxT = card.classList.contains('cta-box') ? 4 : 7;
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
+        const dy = (e.clientY - r.top - r.height/2) / (r.height/2);
+        card.style.transform = `perspective(700px) rotateY(${dx*maxT}deg) rotateX(${-dy*maxT}deg) translateZ(8px)`;
+        card.style.transition = 'transform 0.08s ease, border-color 0.3s, box-shadow 0.3s';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(700px) rotateY(0) rotateX(0) translateZ(0)';
+        card.style.transition = 'transform 0.5s ease, border-color 0.3s, box-shadow 0.3s';
+      });
+    });
+  }
+
+  // ── Scroll reveal ──
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 0.07 + 's';
+    revealObs.observe(el);
+  });
+
+  // ── Text scramble (desktop only) ──
+  if (!isMobile) {
+    const scrambleEl = document.getElementById('scrambleTarget');
+    const finalText = 'te conoce de verdad.';
+    const chars = 'abcdefghijklmnopqrstuvwxyz#@%&*';
+    let frame = 0;
+    const total = 32;
+    function scramble() {
+      frame++;
+      const revealed = Math.floor((frame / total) * finalText.length);
+      let out = '';
+      for (let i = 0; i < finalText.length; i++) {
+        if (i < revealed || finalText[i] === ' ' || finalText[i] === '.') out += finalText[i];
+        else out += chars[Math.floor(Math.random() * chars.length)];
+      }
+      scrambleEl.textContent = out;
+      if (frame < total) requestAnimationFrame(scramble);
+      else scrambleEl.textContent = finalText;
+    }
+    setTimeout(scramble, 600);
+  }
+
+  // ── Typewriter on hero subtitle ──
+  const twEl = document.getElementById('twText');
+  const twCursor = document.getElementById('twCursor');
+  const twLines = [
+    'Te recuerda por nombre. Aprende cómo eres tú. Sin repetirle nada.',
+    'Recordatorios, tareas, resúmenes — todo en WhatsApp, sin apps extra.',
+    'No es un chatbot genérico. Es tuyo, con tu nombre y tu personalidad.'
+  ];
+
+  let twLineIdx = 0;
+  let twCharIdx = 0;
+  let twDeleting = false;
+  let twPause = false;
+
+  function typeWriter() {
+    const current = twLines[twLineIdx];
+    if (!twDeleting) {
+      twEl.textContent = current.slice(0, twCharIdx + 1);
+      twCharIdx++;
+      if (twCharIdx === current.length) {
+        // Pause at end, then delete
+        setTimeout(() => { twDeleting = true; requestAnimationFrame(typeWriter); }, 2800);
+        return;
+      }
+      setTimeout(typeWriter, 32);
+    } else {
+      twEl.textContent = current.slice(0, twCharIdx - 1);
+      twCharIdx--;
+      if (twCharIdx === 0) {
+        twDeleting = false;
+        twLineIdx = (twLineIdx + 1) % twLines.length;
+        setTimeout(typeWriter, 400);
+        return;
+      }
+      setTimeout(typeWriter, 16);
+    }
+  }
+  setTimeout(typeWriter, 1200);
+
+  // ── 3D Card Carousel for testimonials ──
+  const cards = document.querySelectorAll('.cube-card');
+  const dots = document.querySelectorAll('.carousel-dot');
+  let current = 0;
+  let autoTimer;
+
+  function positionCards(activeIdx) {
+    const cardW = cards[0].offsetWidth;
+    const total = cards.length;
+
+    cards.forEach((card, i) => {
+      let offset = i - activeIdx;
+      if (offset > total / 2) offset -= total;
+      if (offset < -total / 2) offset += total;
+      const absOffset = Math.abs(offset);
+
+      const x = offset * (cardW * 0.85 + 20);
+      const z = -absOffset * 120;
+      const rotY = offset * 18;
+      const scale = 1 - absOffset * 0.12;
+      const opacity = 1 - absOffset * 0.45;
+
+      card.style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) rotateY(${rotY}deg) scale(${scale})`;
+      card.style.opacity = Math.max(opacity, 0);
+      card.style.zIndex = 10 - absOffset;
+      card.classList.toggle('active', i === activeIdx);
+    });
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === activeIdx));
+  }
+
+  function goToSlide(idx) {
+    current = ((idx % cards.length) + cards.length) % cards.length;
+    positionCards(current);
+    clearInterval(autoTimer);
+    autoTimer = setInterval(nextSlide, 4000);
+  }
+
+  function nextSlide() { goToSlide(current + 1); }
+
+  positionCards(0);
+  autoTimer = setInterval(nextSlide, 4000);
+
+  let touchStartX = 0;
+  const stage = document.getElementById('cubeStage');
+  stage.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goToSlide(diff > 0 ? current + 1 : current - 1);
+  });
+  stage.addEventListener('mouseenter', () => clearInterval(autoTimer));
+  stage.addEventListener('mouseleave', () => { autoTimer = setInterval(nextSlide, 4000); });
+  window.addEventListener('resize', () => positionCards(current), { passive: true });
+  </script>
+
+  <!-- ══ HERO PARTICLE CANVAS ══ -->
+  <script>
+  (function() {
+    const canvas = document.getElementById('heroCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [], mouse = { x: -9999, y: -9999 };
+    const COUNT = 72, CONNECT_DIST = 130, MOUSE_DIST = 110;
+    const C1 = '124,58,255', C2 = '0,212,255', C3 = '168,85,247';
+    const COLORS = [C1, C2, C3];
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      W = canvas.width  = rect.width;
+      H = canvas.height = rect.height;
+    }
+
+    function mkParticle() {
+      const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+      return {
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.6 + 0.6,
+        color: c, alpha: Math.random() * 0.5 + 0.2
+      };
+    }
+
+    function init() { resize(); particles = Array.from({ length: COUNT }, mkParticle); }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      // Move
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        // Mouse repulsion
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < MOUSE_DIST) {
+          const f = (MOUSE_DIST - d) / MOUSE_DIST * 0.012;
+          p.vx += (dx / d) * f; p.vy += (dy / d) * f;
+        }
+        // Speed cap
+        const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+        if (spd > 0.8) { p.vx = p.vx/spd*0.8; p.vy = p.vy/spd*0.8; }
+      }
+      // Lines between particles
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < CONNECT_DIST) {
+            const op = (1 - d/CONNECT_DIST) * 0.18;
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(${a.color},${op})`;
+            ctx.lineWidth = 0.6;
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      // Dots
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+
+    // Mouse tracking
+    const hero = canvas.parentElement;
+    hero.addEventListener('mousemove', e => {
+      const rect = hero.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+    hero.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; }, { passive: true });
+
+    // Touch
+    hero.addEventListener('touchmove', e => {
+      const rect = hero.getBoundingClientRect();
+      mouse.x = e.touches[0].clientX - rect.left;
+      mouse.y = e.touches[0].clientY - rect.top;
+    }, { passive: true });
+
+    window.addEventListener('resize', () => { resize(); }, { passive: true });
+
+    // Start after page load to not block render
+    if (document.readyState === 'complete') { init(); draw(); }
+    else window.addEventListener('load', () => { init(); draw(); });
+  })();
+  </script>
+</body>
+</html>

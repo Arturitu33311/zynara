@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<!-- ≽^•ɷ•^≼ zynara onboarding v3 -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zynara — Configura tu asistente</title>
+<link rel="icon" type="image/png" href="/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #07070f;
+    --bg2:       #0d0d1a;
+    --surface:   #11111e;
+    --surface2:  #181828;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.11);
+    --white:     #ffffff;
+    --text:      #f0eeff;
+    --muted:     #8b87a8;
+    --dimmed:    #4e4a65;
+    --purple:    #7c3aff;
+    --cyan:      #00d4ff;
+    --violet:    #a855f7;
+    --cta:       #b5ff2d;
+    --cta-dark:  #07070f;
+    --cta-hover: #ccff4d;
+    --cta-glow:  rgba(181,255,45,0.35);
+    --grad-brand: linear-gradient(135deg, #7c3aff 0%, #a855f7 50%, #00d4ff 100%);
+    --grad-text:  linear-gradient(135deg, #c084fc 0%, #818cf8 40%, #22d3ee 100%);
+    --glow-purple: rgba(124,58,255,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Noise overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Ambient glows ── */
+  .glow-top {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(ellipse at center, rgba(124,58,255,0.12) 0%, rgba(168,85,247,0.06) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-bottom {
+    position: fixed;
+    bottom: -150px;
+    right: -100px;
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(0,212,255,0.08) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .onboarding-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 60px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(7,7,15,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.04em;
+    background: var(--grad-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+
+  .nav-step-indicator {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dimmed);
+  }
+
+  /* ── CONTAINER ── */
+  .container {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 100px 28px 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    margin-bottom: 56px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.18);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+
+  .header-eyebrow-dot {
+    width: 5px; height: 5px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .header h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.06;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .header h1 .grad {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrapper {
+    margin-bottom: 52px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .progress-step-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .progress-step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--dimmed);
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+
+  .progress-step-dot.done {
+    background: rgba(124,58,255,0.15);
+    border-color: rgba(124,58,255,0.5);
+    color: var(--violet);
+  }
+
+  .progress-step-dot.active {
+    background: rgba(0,212,255,0.1);
+    border-color: var(--cyan);
+    color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0,212,255,0.3);
+  }
+
+  .progress-step-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dimmed);
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+
+  .progress-step-label.done .progress-step-name { color: var(--dimmed); }
+  .progress-step-label.active .progress-step-name { color: var(--cyan); }
+
+  .progress-bar {
+    width: 100%;
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--violet), var(--cyan));
+    border-radius: 2px;
+    transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 12px rgba(0,212,255,0.45);
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 7px; height: 7px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(0,212,255,0.4);
+  }
+
+  .progress-label {
+    display: none; /* replaced by step labels */
+  }
+
+  /* ── STEPS ── */
+  .step { display: none; animation: fadeUp 0.4s ease both; }
+  .step.active { display: block; }
+
+  .step-header {
+    position: relative;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+  }
+
+  /* Giant decorative step number in background */
+  .step-bg-number {
+    position: absolute;
+    right: -12px;
+    top: -24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(124,58,255,0.1);
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .step-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .step-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--purple);
+    opacity: 0.6;
+  }
+
+  .step h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.5rem, 3.8vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--white);
+    margin-bottom: 8px;
+    line-height: 1.08;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step .desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 0;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FIELDS ── */
+  .field { margin-bottom: 22px; }
+
+  label {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--dimmed); font-style: italic; }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: rgba(124,58,255,0.55);
+    box-shadow: 0 0 0 3px rgba(124,58,255,0.09);
+    background: rgba(17,17,30,0.8);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.7;
+  }
+
+  /* Ambassador field */
+  .field-ambassador label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--dimmed);
+  }
+
+  .field-ambassador label::before {
+    content: '✦';
+    color: var(--cta);
+    font-size: 9px;
+    opacity: 0.65;
+  }
+
+  .field-ambassador input {
+    border-style: dashed;
+    border-color: var(--border);
+    opacity: 0.65;
+  }
+
+  .field-ambassador input:focus {
+    border-style: solid;
+    border-color: rgba(181,255,45,0.4);
+    box-shadow: 0 0 0 3px rgba(181,255,45,0.07);
+    opacity: 1;
+  }
+
+  /* ── CHIPS ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .chip {
+    padding: 9px 18px;
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+    color: var(--muted);
+    user-select: none;
+  }
+
+  .chip:hover {
+    border-color: rgba(124,58,255,0.45);
+    color: var(--text);
+  }
+
+  .chip.selected {
+    background: rgba(124,58,255,0.12);
+    border-color: rgba(124,58,255,0.55);
+    color: #c4b5fd;
+    box-shadow: 0 0 16px rgba(124,58,255,0.12);
+  }
+
+  /* ── TONE CARDS — 2x2 grid ── */
+  .tone-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .tone-card {
+    padding: 28px 24px 24px;
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tone-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 25% 0%, rgba(124,58,255,0.12), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  /* Decorative step number on cards */
+  .tone-card .tone-num {
+    position: absolute;
+    bottom: -6px;
+    right: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+    user-select: none;
+    pointer-events: none;
+    transition: -webkit-text-stroke-color 0.3s;
+  }
+
+  .tone-card:hover {
+    border-color: rgba(124,58,255,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .tone-card:hover::before { opacity: 1; }
+  .tone-card:hover .tone-num { -webkit-text-stroke-color: rgba(124,58,255,0.08); }
+
+  .tone-card.selected {
+    border-color: rgba(124,58,255,0.65);
+    background: rgba(124,58,255,0.07);
+    box-shadow: 0 0 0 1px rgba(124,58,255,0.25), 0 8px 40px rgba(124,58,255,0.15);
+    transform: translateY(-2px);
+  }
+
+  .tone-card.selected::before { opacity: 1; }
+  .tone-card.selected .tone-num { -webkit-text-stroke-color: rgba(124,58,255,0.12); }
+
+  .tone-card .emoji {
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+    display: block;
+    position: relative;
+    z-index: 1;
+    line-height: 1;
+  }
+
+  .tone-card .tone-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--white);
+    margin-bottom: 7px;
+    letter-spacing: -0.03em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tone-card .tone-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── NAV BUTTONS ── */
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 44px;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+    letter-spacing: -0.01em;
+    border: none;
+  }
+
+  .btn-next {
+    background: var(--cta);
+    color: var(--cta-dark);
+    flex: 1;
+    max-width: 190px;
+    position: relative;
+  }
+
+  .btn-next:hover {
+    background: var(--cta-hover);
+    box-shadow: 0 0 24px var(--cta-glow), 0 4px 16px rgba(181,255,45,0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-next:active { transform: translateY(0); }
+
+  .btn-back {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  .btn-back:hover {
+    color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .btn-danger {
+    background: transparent;
+    color: #f87171;
+    border: 1px solid rgba(248,113,113,0.28);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  .btn-danger:hover {
+    background: rgba(248,113,113,0.07);
+    border-color: rgba(248,113,113,0.48);
+  }
+
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+  /* ── SUMMARY SCREEN ── */
+  .summary-screen { display: none; animation: fadeUp 0.5s ease both; }
+  .summary-screen.active { display: block; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .summary-block-full {
+    grid-column: 1 / -1;
+  }
+
+  .summary-block {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 18px;
+    padding: 26px;
+  }
+
+  .summary-block h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .summary-block h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(124,58,255,0.15);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.84rem;
+    gap: 10px;
+  }
+
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .key { color: var(--muted); flex-shrink: 0; font-family: 'DM Sans', sans-serif; }
+  .summary-row .val { color: var(--white); text-align: right; font-weight: 500; word-break: break-word; font-family: 'DM Sans', sans-serif; }
+
+  .summary-long {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.84rem;
+  }
+
+  .summary-long:last-child { border-bottom: none; }
+  .summary-long .key { color: var(--muted); margin-bottom: 5px; font-size: 0.75rem; font-family: 'Syne', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+  .summary-long .val { color: var(--text); line-height: 1.7; font-family: 'DM Sans', sans-serif; }
+
+  /* ── DONE SCREEN ── */
+  .done-screen {
+    display: none;
+    animation: fadeUp 0.6s ease both;
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .done-screen.active { display: block; }
+
+  /* Particle container */
+  .done-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: particleFall linear forwards;
+    opacity: 0;
+  }
+
+  @keyframes particleFall {
+    0%   { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(400px) rotate(720deg); }
+  }
+
+  /* Glow halo behind the cat */
+  .done-glow-ring {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 32px;
+  }
+
+  .done-glow-ring::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px; height: 180px;
+    background: radial-gradient(ellipse, rgba(124,58,255,0.25) 0%, rgba(0,212,255,0.08) 50%, transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
+    50% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+  }
+
+  .done-cat {
+    font-size: 4.5rem;
+    display: block;
+    position: relative;
+    z-index: 1;
+    animation: catBounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(124,58,255,0.4));
+  }
+
+  @keyframes catBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.03); }
+  }
+
+  .done-screen h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: var(--white);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .done-divider {
+    width: 56px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    margin: 0 auto 24px;
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(0,212,255,0.4);
+    position: relative;
+    z-index: 1;
+  }
+
+  .done-screen p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.94rem;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 380px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .done-screen p span { color: var(--cyan); font-style: normal; font-weight: 600; }
+
+  /* ── GATE SCREEN ── */
+  .gate-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    animation: fadeUp 0.6s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .gate-screen::before {
+    content: '';
+    position: fixed;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 600px;
+    background: radial-gradient(ellipse, rgba(124,58,255,0.18) 0%, rgba(0,212,255,0.05) 50%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .gate-icon {
+    font-size: 3.8rem;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 24px rgba(124,58,255,0.3));
+  }
+
+  .gate-screen h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: var(--white);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .gate-screen > p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 360px;
+    margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .gate-screen > p span { color: var(--cta); font-style: normal; font-weight: 700; }
+
+  .btn-gate {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 17px 40px;
+    background: var(--cta);
+    color: var(--cta-dark);
+    text-decoration: none;
+    border-radius: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 0 0 var(--cta-glow);
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-gate:hover {
+    background: var(--cta-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 48px var(--cta-glow);
+  }
+
+  .gate-note {
+    margin-top: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    color: var(--dimmed);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── QUICK SUMMARY (step 5) ── */
+  .quick-summary {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 24px;
+    font-size: 0.88rem;
+    line-height: 2.1;
+  }
+
+  .quick-summary .qs-row { display: flex; gap: 8px; }
+  .quick-summary .qs-key { color: var(--muted); min-width: 100px; font-family: 'DM Sans', sans-serif; }
+  .quick-summary .qs-val { color: var(--white); font-weight: 500; font-family: 'DM Sans', sans-serif; }
+  .quick-summary .qs-val.accent { color: var(--cyan); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* ── WATERMARK ── */
+  .watermark {
+    position: fixed;
+    bottom: 16px;
+    right: 18px;
+    font-size: 10px;
+    color: var(--border2);
+    font-family: 'DM Sans', sans-serif;
+    user-select: none;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 580px) {
+    .tone-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tone-card { padding: 20px 16px 18px; }
+    .tone-card .emoji { font-size: 1.5rem; margin-bottom: 10px; }
+    .tone-card .tone-name { font-size: 0.88rem; }
+    .tone-card .tone-desc { font-size: 0.73rem; }
+    .tone-card .tone-num { font-size: 3rem; }
+    .container { padding: 90px 18px 100px; }
+    .onboarding-nav { padding: 0 18px; }
+    .progress-step-name { display: none; }
+    .progress-step-dot { width: 24px; height: 24px; font-size: 0.58rem; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .summary-block-full { grid-column: 1; }
+    .step-bg-number { font-size: 5rem; right: -6px; top: -16px; }
+    .done-cat { font-size: 3.4rem; }
+    .done-screen h2 { font-size: clamp(1.6rem,5vw,2.2rem); }
+  }
+
+  @media (max-width: 380px) {
+    .tone-grid { grid-template-columns: 1fr; }
+    .summary-row { flex-direction: column; gap: 3px; }
+    .summary-row .val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient glows -->
+<div class="glow-top"></div>
+<div class="glow-bottom"></div>
+
+<!-- ── NAV ── -->
+<nav class="onboarding-nav" id="onboardingNav">
+  <a href="/" class="nav-logo" style="display:flex;align-items:center;gap:10px;"><img src="/logo.png" width="32" height="32" style="border-radius:8px;flex-shrink:0;" alt="Zynara"><span>Zynara</span></a>
+  <span class="nav-step-indicator" id="navStepLabel">Configuración</span>
+</nav>
+
+<!-- ══════════════════════════════
+     GATE: sin parámetro de Stripe
+══════════════════════════════ -->
+<div id="gateScreen" class="gate-screen" style="display:none;">
+  <div class="gate-icon">🔒</div>
+  <h2>Primero activa tu suscripción</h2>
+  <p>
+    Para configurar tu asistente necesitas una suscripción activa.<br><br>
+    Son solo <span>$99 MXN al mes</span> — en minutos tienes
+    tu asistente personal directo en WhatsApp.
+  </p>
+  <a href="https://buy.stripe.com/fZubJ2aRO8pWfq33o7gbm01" class="btn-gate" target="_blank" rel="noopener">
+    Suscribirme por $149 MXN →
+  </a>
+  <p class="gate-note">Cancela cuando quieras · Pagos seguros por Stripe</p>
+</div>
+
+<!-- ══════════════════════════════
+     MAIN FORM
+══════════════════════════════ -->
+<div class="container" id="mainContainer" style="display:none;">
+
+  <div class="header">
+    <div class="header-eyebrow">
+      <span class="header-eyebrow-dot"></span>
+      Suscripción activa
+    </div>
+    <h1>Configura tu<br><span class="grad">asistente.</span></h1>
+    <p>Responde esto y en minutos tu asistente queda listo para ti.</p>
+  </div>
+
+  <!-- ── PROGRESS ── -->
+  <div class="progress-wrapper" id="progressBar">
+    <div class="progress-steps">
+      <div class="progress-step-label active" id="pl-1">
+        <div class="progress-step-dot active" id="pd-1">1</div>
+        <span class="progress-step-name">Tú</span>
+      </div>
+      <div class="progress-step-label" id="pl-2">
+        <div class="progress-step-dot" id="pd-2">2</div>
+        <span class="progress-step-name">Contexto</span>
+      </div>
+      <div class="progress-step-label" id="pl-3">
+        <div class="progress-step-dot" id="pd-3">3</div>
+        <span class="progress-step-name">Tono</span>
+      </div>
+      <div class="progress-step-label" id="pl-4">
+        <div class="progress-step-dot" id="pd-4">4</div>
+        <span class="progress-step-name">Canal</span>
+      </div>
+      <div class="progress-step-label" id="pl-5">
+        <div class="progress-step-dot" id="pd-5">5</div>
+        <span class="progress-step-name">Revisar</span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+      <span class="progress-label" id="progressLabel">1 / 5</span>
+    </div>
+  </div>
+
+  <!-- ── STEP 1 ── -->
+  <div class="step active" id="step-1">
+    <div class="step-header">
+      <span class="step-bg-number">01</span>
+      <div class="step-eyebrow">Paso 01</div>
+      <h2>¿Quién eres?</h2>
+      <p class="desc">Info básica para que tu asistente te conozca desde el primer mensaje.</p>
+    </div>
+    <div class="field">
+      <label>Tu nombre</label>
+      <input type="text" id="userName" placeholder="ej. Sofía, Carlos..." />
+    </div>
+    <div class="field">
+      <label>¿Dónde estudias / qué haces?</label>
+      <input type="text" id="userRole" placeholder="ej. Prepa ITESO 3er semestre, CUCEI Ing. Civil..." />
+    </div>
+    <div class="field">
+      <label>Cuéntale algo de ti <span style="color:var(--dimmed);font-style:italic;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(opcional)</span></label>
+      <textarea id="userBio" placeholder="ej. Soy muy nocturno, procrastino todo y odio las matemáticas..."></textarea>
+    </div>
+    <div class="field">
+      <label>Tu número de WhatsApp</label>
+      <div style="display:flex;gap:8px;align-items:stretch;">
+        <select id="countryCode" style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0 12px;cursor:pointer;flex-shrink:0;width:140px;max-width:140px;">
+          <option value="+521" data-mobile="true">🇲🇽 +52 MX</option>
+          <option value="+57">🇨🇴 +57 CO</option>
+          <option value="+54">🇦🇷 +54 AR</option>
+          <option value="+56">🇨🇱 +56 CL</option>
+          <option value="+51">🇵🇪 +51 PE</option>
+          <option value="+58">🇻🇪 +58 VE</option>
+          <option value="+593">🇪🇨 +593 EC</option>
+          <option value="+502">🇬🇹 +502 GT</option>
+          <option value="+503">🇸🇻 +503 SV</option>
+          <option value="+504">🇭🇳 +504 HN</option>
+          <option value="+505">🇳🇮 +505 NI</option>
+          <option value="+506">🇨🇷 +506 CR</option>
+          <option value="+507">🇵🇦 +507 PA</option>
+          <option value="+53">🇨🇺 +53 CU</option>
+          <option value="+1">🇺🇸 +1 US</option>
+          <option value="+34">🇪🇸 +34 ES</option>
+        </select>
+        <input type="tel" id="userPhoneLocal" placeholder="3312345678" style="flex:1;" />
+      </div>
+      <small style="color:var(--muted);font-size:0.76rem;margin-top:5px;display:block;font-family:'DM Sans',sans-serif;font-style:italic;">Solo los dígitos de tu número, sin código de país</small>
+    </div>
+    <div class="field field-ambassador">
+      <label>Código de Embajador (Opcional)</label>
+      <input type="text" id="ambassadorCode" placeholder="ej. AMIGO2025" autocomplete="off" />
+    </div>
+    <div class="step-nav">
+      <div></div>
+      <button class="btn btn-next" onclick="nextStep(1)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2 ── -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <span class="step-bg-number">02</span>
+      <div class="step-eyebrow">Paso 02</div>
+      <h2>Tu contexto escolar</h2>
+      <p class="desc">Materias, proyectos o lo que más te ocupa el tiempo.</p>
+    </div>
+    <div class="field">
+      <label>¿Cuáles son tus materias o proyectos?</label>
+      <textarea id="userSubjects" placeholder="ej. Cálculo, Química, Inglés B2&#10;o: tesis, proyecto de física, trabajo final..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Qué siempre se te olvida entregar?</label>
+      <textarea id="userReminders" placeholder="ej. Siempre olvido las tareas de historia..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Qué quieres que haga tu asistente?</label>
+      <textarea id="userAutomation" placeholder="ej. Que me mande resúmenes, me avise de entregas, me explique temas..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿A qué horas sueles estar activo?</label>
+      <div class="chips" id="scheduleChips">
+        <div class="chip" onclick="toggleChip(this)" data-val="Mañana (7-12)">🌅 Mañana (7-12)</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Tarde (12-18)">☀️ Tarde (12-18)</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Noche (18-24)">🌙 Noche (18-24)</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Trasnochador (0-6)">⚡ Trasnochador (0-6)</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Cómo aprendes mejor?</label>
+      <div class="chips" id="learnChips">
+        <div class="chip" onclick="toggleChip(this)" data-val="Explicaciones cortas">Explicaciones cortas</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Ejemplos prácticos">Ejemplos prácticos</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Paso a paso">Paso a paso</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Resúmenes">Resúmenes</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Exámenes próximos? <span style="color:var(--dimmed);font-style:italic;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(opcional)</span></label>
+      <input type="text" id="userExams" placeholder="ej. Química el viernes 4, Matemáticas el lunes 7..." />
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-back" onclick="prevStep(2)">← Atrás</button>
+      <button class="btn btn-next" onclick="nextStep(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 3 ── -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <span class="step-bg-number">03</span>
+      <div class="step-eyebrow">Paso 03</div>
+      <h2>¿Cómo quieres que te hable?</h2>
+      <p class="desc">El tono define la personalidad de tu asistente.</p>
+    </div>
+    <div class="tone-grid">
+      <div class="tone-card" onclick="selectTone('relajado')" data-tone="relajado">
+        <span class="emoji">🌊</span>
+        <div class="tone-name">Relajado</div>
+        <div class="tone-desc">Casual, como un amigo. Sin formalidades, al punto.</div>
+        <span class="tone-num">01</span>
+      </div>
+      <div class="tone-card" onclick="selectTone('serio')" data-tone="serio">
+        <span class="emoji">⚡</span>
+        <div class="tone-name">Serio y eficiente</div>
+        <div class="tone-desc">Respuestas cortas y concretas. Sin rodeos ni chistes.</div>
+        <span class="tone-num">02</span>
+      </div>
+      <div class="tone-card" onclick="selectTone('motivador')" data-tone="motivador">
+        <span class="emoji">🚀</span>
+        <div class="tone-name">Motivador</div>
+        <div class="tone-desc">Te impulsa y anima. Bueno para días flojos antes del examen.</div>
+        <span class="tone-num">03</span>
+      </div>
+      <div class="tone-card" onclick="selectTone('sarcastico')" data-tone="sarcastico">
+        <span class="emoji">💀</span>
+        <div class="tone-name">Sarcástico</div>
+        <div class="tone-desc">Humor negro, honesto. Te dice las cosas como son.</div>
+        <span class="tone-num">04</span>
+      </div>
+      <div class="tone-card" onclick="selectTone('mentor')" data-tone="mentor" style="grid-column: 1 / -1;">
+        <span class="emoji">🧠</span>
+        <div class="tone-name">Mentor</div>
+        <div class="tone-desc">Como un profe que sí explica. Paciente y detallado.</div>
+        <span class="tone-num">05</span>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-back" onclick="prevStep(3)">← Atrás</button>
+      <button class="btn btn-next" onclick="nextStep(3)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 4 ── -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <span class="step-bg-number">04</span>
+      <div class="step-eyebrow">Paso 04</div>
+      <h2>Canal y nombre</h2>
+      <p class="desc">¿Cómo y dónde quieres que te contacte tu asistente?</p>
+    </div>
+    <div class="field">
+      <label>¿Cómo quieres llamarle?</label>
+      <input type="text" id="assistantName" placeholder="ej. Jinx, Nova, Byte, Aria..." />
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+        <span style="font-family:'DM Sans',sans-serif;font-size:0.76rem;color:var(--dimmed);font-style:italic;flex-shrink:0;">Sugerencias:</span>
+        <div class="chips" id="nameSuggestions" style="gap:6px;">
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Nova')">Nova</div>
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Byte')">Byte</div>
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Aria')">Aria</div>
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Lyra')">Lyra</div>
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Nexo')">Nexo</div>
+          <div class="chip" style="padding:6px 14px;font-size:0.78rem;" onclick="setAssistantName('Kira')">Kira</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Canal preferido</label>
+      <div class="chips" id="channelChips">
+        <div class="chip" onclick="toggleChip(this)" data-val="WhatsApp">WhatsApp</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Telegram">Telegram</div>
+        <div class="chip" onclick="toggleChip(this)" data-val="Web">Web</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Idioma preferido</label>
+      <div class="chips" id="langChips">
+        <div class="chip selected" onclick="selectSingle(this,'lang')" data-val="español">Español</div>
+        <div class="chip" onclick="selectSingle(this,'lang')" data-val="inglés">Inglés</div>
+        <div class="chip" onclick="selectSingle(this,'lang')" data-val="spanglish">Spanglish</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Quieres avisos proactivos?</label>
+      <div class="chips" id="proactiveChips">
+        <div class="chip selected" onclick="selectSingle(this,'proactive')" data-val="si">Sí, que me avise</div>
+        <div class="chip" onclick="selectSingle(this,'proactive')" data-val="no">No, solo cuando yo pregunte</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-back" onclick="prevStep(4)">← Atrás</button>
+      <button class="btn btn-next" onclick="nextStep(4)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 5 ── -->
+  <div class="step" id="step-5">
+    <div class="step-header">
+      <span class="step-bg-number">05</span>
+      <div class="step-eyebrow">Paso 05</div>
+      <h2>¿Todo bien?</h2>
+      <p class="desc">Un vistazo rápido antes del resumen completo.</p>
+    </div>
+    <div id="step5Summary"></div>
+    <div class="step-nav">
+      <button class="btn btn-back" onclick="prevStep(5)">← Atrás</button>
+      <button class="btn btn-next" onclick="showFullSummary()" style="max-width:220px;">Ver resumen →</button>
+    </div>
+  </div>
+
+  <!-- ── SUMMARY ── -->
+  <div class="summary-screen" id="summaryScreen">
+    <div class="step-eyebrow" style="margin-bottom:10px;">Resumen completo</div>
+    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.5rem,3.8vw,2rem);font-weight:800;letter-spacing:-0.05em;color:var(--white);margin-bottom:8px;line-height:1.08;">¿Todo listo?</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:0.88rem;font-style:italic;color:var(--muted);margin-bottom:36px;line-height:1.8;">Revisa que todo esté bien. Si algo está mal, reinicia. Si está correcto, confirma.</p>
+
+    <div class="summary-grid">
+      <!-- Perfil — columna izquierda -->
+      <div class="summary-block">
+        <h3>Tu perfil</h3>
+        <div class="summary-row"><span class="key">Nombre</span><span class="val" id="sum-name">—</span></div>
+        <div class="summary-row"><span class="key">Contexto</span><span class="val" id="sum-role">—</span></div>
+        <div class="summary-row"><span class="key">WhatsApp</span><span class="val" id="sum-phone">—</span></div>
+        <div class="summary-row"><span class="key">Embajador</span><span class="val" id="sum-ambassador">—</span></div>
+        <div class="summary-long"><div class="key">Sobre ti</div><div class="val" id="sum-bio">—</div></div>
+      </div>
+
+      <!-- Asistente — columna derecha -->
+      <div class="summary-block">
+        <h3>Tu asistente</h3>
+        <div class="summary-row"><span class="key">Nombre</span><span class="val" id="sum-assistant">—</span></div>
+        <div class="summary-row"><span class="key">Tono</span><span class="val" id="sum-tone">—</span></div>
+        <div class="summary-row"><span class="key">Canal</span><span class="val" id="sum-channels">—</span></div>
+        <div class="summary-row"><span class="key">Idioma</span><span class="val" id="sum-lang">—</span></div>
+        <div class="summary-row"><span class="key">Avisos</span><span class="val" id="sum-proactive">—</span></div>
+      </div>
+
+      <!-- Contexto — fila completa -->
+      <div class="summary-block summary-block-full">
+        <h3>Tu contexto</h3>
+        <div class="summary-long"><div class="key">Materias / proyectos</div><div class="val" id="sum-subjects">—</div></div>
+        <div class="summary-long"><div class="key">Lo que quieres recordar</div><div class="val" id="sum-reminders">—</div></div>
+        <div class="summary-long"><div class="key">Lo que quieres automatizar</div><div class="val" id="sum-automation">—</div></div>
+      </div>
+    </div>
+
+    <div class="step-nav" style="margin-top:8px;">
+      <button class="btn btn-danger" onclick="restartForm()">↺ Reiniciar</button>
+      <button class="btn btn-next" id="confirmBtn" onclick="confirmAndSend()" style="max-width:260px;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;">
+        Confirmar y activar ✦
+      </button>
+    </div>
+  </div>
+
+  <!-- ── DONE ── -->
+  <div class="done-screen" id="doneScreen">
+    <div class="done-particles" id="doneParticles"></div>
+    <div class="done-glow-ring">
+      <span class="done-cat">≽^•ɷ•^≼</span>
+    </div>
+    <h2>¡Ya casi!</h2>
+    <div class="done-divider"></div>
+    <p>
+      Tu asistente está siendo configurado.<br><br>
+      <span>Espera unos minutos</span> — pronto recibirás<br>
+      un mensaje en <span id="done-channel">WhatsApp</span> cuando<br>
+      <span id="done-name">tu asistente</span> esté listo para ti.
+    </p>
+  </div>
+
+</div>
+
+<div class="watermark">≽^•ɷ•^≼</div>
+
+<script>
+  // ── Gate: verifica token de un solo uso con el servidor ──
+  (async function() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const beta = params.get('beta');
+    const gate = document.getElementById('gateScreen');
+    const main = document.getElementById('mainContainer');
+
+    // Código beta para testers internos
+    if (beta === 'zynara2026') {
+      gate.style.display = 'none';
+      main.style.display = 'block';
+      window._accessToken = null;
+      return;
+    }
+
+    if (!token) {
+      gate.style.display = 'flex';
+      main.style.display = 'none';
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/verify-token?token=' + encodeURIComponent(token));
+      const data = await res.json();
+      if (data.valid) {
+        gate.style.display = 'none';
+        main.style.display = 'block';
+        window._accessToken = token;
+      } else {
+        console.warn('[gate] Token inválido:', data.reason);
+        gate.style.display = 'flex';
+        main.style.display = 'none';
+      }
+    } catch (e) {
+      console.error('[gate] Error verificando token:', e);
+      gate.style.display = 'flex';
+      main.style.display = 'none';
+    }
+  })();
+
+  // ── State ──
+  let currentStep = 1;
+  const totalSteps = 5;
+  let selectedTone = '';
+  let selectedLang = 'español';
+  let selectedProactive = 'si';
+
+  const toneLabels = {
+    relajado: 'Relajado',
+    serio: 'Serio y eficiente',
+    motivador: 'Motivador',
+    sarcastico: 'Sarcástico',
+    mentor: 'Mentor'
+  };
+
+  const toneDescriptions = {
+    relajado: 'Eres relajado/a y casual. Hablas como un amigo de confianza — sin formalidades, directo/a al punto.',
+    serio: 'Eres preciso/a y eficiente. Respuestas cortas y concretas. Sin rodeos, sin chistes innecesarios.',
+    motivador: 'Eres energético/a y motivador/a. Impulsa al usuario a actuar, celebra sus logros, lo anima cuando está a punto de rendirse.',
+    sarcastico: 'Tienes humor negro y eres brutalmente honesto/a. Le dices las cosas como son, con sarcasmo inteligente.',
+    mentor: 'Eres un mentor paciente y detallado. Explicas cada concepto paso a paso, verificas que se entendió, y nunca dejas una pregunta sin respuesta completa.'
+  };
+
+  function setAssistantName(name) {
+    document.getElementById('assistantName').value = name;
+  }
+
+  function updateProgress() {
+    const pct = (currentStep / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = currentStep + ' / ' + totalSteps;
+    document.getElementById('navStepLabel').textContent = 'Paso ' + currentStep + ' de ' + totalSteps;
+
+    // Update step dots
+    for (let i = 1; i <= totalSteps; i++) {
+      const dot = document.getElementById('pd-' + i);
+      const lbl = document.getElementById('pl-' + i);
+      dot.classList.remove('active', 'done');
+      lbl.classList.remove('active', 'done');
+      if (i < currentStep) {
+        dot.classList.add('done');
+        lbl.classList.add('done');
+        dot.textContent = '✓';
+      } else if (i === currentStep) {
+        dot.classList.add('active');
+        lbl.classList.add('active');
+        dot.textContent = i;
+      } else {
+        dot.textContent = i;
+      }
+    }
+  }
+
+  function nextStep(from) {
+    document.getElementById('step-' + from).classList.remove('active');
+    currentStep = from + 1;
+    if (currentStep === 5) buildStep5Summary();
+    document.getElementById('step-' + currentStep).classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevStep(from) {
+    document.getElementById('step-' + from).classList.remove('active');
+    currentStep = from - 1;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectTone(tone) {
+    selectedTone = tone;
+    document.querySelectorAll('.tone-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('[data-tone="' + tone + '"]').classList.add('selected');
+  }
+
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function selectSingle(el, group) {
+    el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'lang') selectedLang = el.dataset.val;
+    if (group === 'proactive') selectedProactive = el.dataset.val;
+  }
+
+  function getChips(id) {
+    return Array.from(document.querySelectorAll('#' + id + ' .chip.selected')).map(c => c.dataset.val).join(', ') || '—';
+  }
+
+  function buildStep5Summary() {
+    const name = document.getElementById('userName').value || '—';
+    const assistantName = document.getElementById('assistantName').value || '—';
+    // XSS fix: construir DOM con textContent en lugar de innerHTML con datos del usuario
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const rows = [
+      ['usuario', name],
+      ['asistente', assistantName],
+      ['tono', toneLabels[selectedTone] || '—'],
+      ['canal', getChips('channelChips')],
+      ['idioma', selectedLang],
+    ];
+    const wrap = document.createElement('div');
+    wrap.className = 'quick-summary';
+    rows.forEach(([k, v]) => {
+      const row = document.createElement('div'); row.className = 'qs-row';
+      const key = document.createElement('span'); key.className = 'qs-key'; key.textContent = k;
+      const val = document.createElement('span'); val.className = k === 'asistente' ? 'qs-val accent' : 'qs-val'; val.textContent = v;
+      row.appendChild(key); row.appendChild(val); wrap.appendChild(row);
+    });
+    const container = document.getElementById('step5Summary');
+    container.innerHTML = '';
+    container.appendChild(wrap);
+  }
+
+  function showFullSummary() {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('progressBar').style.display = 'none';
+    document.getElementById('navStepLabel').textContent = 'Resumen';
+
+    document.getElementById('sum-name').textContent = document.getElementById('userName').value || '—';
+    document.getElementById('sum-role').textContent = document.getElementById('userRole').value || '—';
+    const _cc = document.getElementById('countryCode')?.value || '+521';
+    const _ln = document.getElementById('userPhoneLocal')?.value?.trim() || '';
+    document.getElementById('sum-phone').textContent = _ln ? (_cc + _ln) : '—';
+    document.getElementById('sum-ambassador').textContent = document.getElementById('ambassadorCode').value.trim() || '—';
+    document.getElementById('sum-bio').textContent = document.getElementById('userBio').value || '—';
+    document.getElementById('sum-subjects').textContent = document.getElementById('userSubjects').value || '—';
+    document.getElementById('sum-reminders').textContent = document.getElementById('userReminders').value || '—';
+    document.getElementById('sum-automation').textContent = document.getElementById('userAutomation').value || '—';
+    document.getElementById('sum-assistant').textContent = document.getElementById('assistantName').value || '—';
+    document.getElementById('sum-tone').textContent = toneLabels[selectedTone] || '—';
+    document.getElementById('sum-channels').textContent = getChips('channelChips');
+    document.getElementById('sum-lang').textContent = selectedLang;
+    document.getElementById('sum-proactive').textContent = selectedProactive === 'si' ? 'Sí' : 'No';
+
+    document.getElementById('summaryScreen').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function restartForm() {
+    if (confirm('¿Seguro que quieres reiniciar? Se borrarán todas tus respuestas.')) location.reload();
+  }
+
+  function generateFiles() {
+    const name = document.getElementById('userName').value || 'Usuario';
+    const role = document.getElementById('userRole').value || '';
+    const bio = document.getElementById('userBio').value || '';
+    const _countryCode = document.getElementById('countryCode')?.value || '+521';
+    const _localNum = document.getElementById('userPhoneLocal')?.value?.trim().replace(/\D/g, '') || '';
+    const phone = _countryCode + _localNum;
+    const subjects = document.getElementById('userSubjects').value || '';
+    const reminders = document.getElementById('userReminders').value || '';
+    const automation = document.getElementById('userAutomation').value || '';
+    const schedule = getChips('scheduleChips');
+    const learnStyle = getChips('learnChips');
+    const exams = document.getElementById('userExams')?.value?.trim() || '';
+    const assistantName = document.getElementById('assistantName').value || 'Asistente';
+    const ambassador = document.getElementById('ambassadorCode').value.trim() || '';
+    const channels = getChips('channelChips');
+    const toneText = toneDescriptions[selectedTone] || toneDescriptions['relajado'];
+
+    const soul = `INSTRUCCIÓN CRÍTICA: Responde SIEMPRE en español. Nunca en inglés. Sin excepciones.\n\n# SOUL.md — Personalidad de ${assistantName}\n\n## Identidad\nEres ${assistantName}, el asistente personal de ${name}.\nTu propósito es hacer la vida escolar y cotidiana de ${name} más fácil.\n\n## Tono y personalidad\n${toneText}\n\n## Idioma\nResponde siempre en ${selectedLang}, a menos que ${name} escriba en otro idioma.\n\n## Canales\nAccesible vía: ${channels}.\n\n## Horario de actividad\n${name} suele estar activo: ${schedule || 'sin especificar'}.\n\n## Estilo de aprendizaje\nPreferencia de aprendizaje: ${learnStyle || 'sin especificar'}. Adapta tus explicaciones a este estilo.\n\n## MEMORIA ACTIVA — OBLIGATORIO\nAntes de responder, lee MEMORY.md de tu workspace:\ncurl -s http://127.0.0.1:3001/workspace-file?agent=${assistantName.toLowerCase()}&file=MEMORY.md\nSi tiene contenido, úsalo para personalizar tu respuesta. Llama a ${name} por su nombre. Recuerda sus pendientes, preferencias y contexto.\n\nCuando ${name} mencione algo importante (pendientes, fechas, proyectos, preferencias, datos personales), guárdalo silenciosamente:\ncurl -s -X POST http://127.0.0.1:3001/workspace-file -H "Content-Type: application/json" -d '{"agent":"${assistantName.toLowerCase()}","file":"MEMORY.md","append":true,"content":"- [DATO]: [valor]"}'\nSustituye [DATO] y [valor] con lo que aprendiste. NUNCA menciones que estás guardando algo.\n\n## Reglas técnicas\n- NUNCA muestres XML, JSON, tool_call ni código interno en tus respuestas.\n- Si usas herramientas, hazlo silenciosamente. Solo muestra el resultado final.\n- Sé conciso/a — respuestas largas solo cuando sean necesarias.\n- NUNCA digas que no recuerdas algo si está en MEMORY.md.`;
+
+    const user_md = `# USER.md — Perfil de ${name}\n\n## Datos básicos\n- **Nombre**: ${name}\n- **Contexto**: ${role}${phone ? '\n- **WhatsApp**: ' + phone : ''}${ambassador ? '\n- **Código embajador**: ' + ambassador : ''}\n\n## Sobre ${name}\n${bio || 'Prefiere respuestas en ' + selectedLang + '.'}\n\n${subjects ? '## Materias / Proyectos\n' + subjects : ''}${reminders ? '\n\n## Lo que necesita recordar\n' + reminders : ''}${automation ? '\n\n## Lo que quiere automatizar\n' + automation : ''}${exams ? '\n\n## Exámenes próximos\n' + exams : ''}\n\n## Hábitos y preferencias\n- Horario activo: ${schedule || 'sin especificar'}\n- Estilo de aprendizaje: ${learnStyle || 'sin especificar'}\n- Idioma: ${selectedLang}\n- Canal: ${channels}\n- Avisos proactivos: ${selectedProactive === 'si' ? 'sí' : 'no'}`;
+
+    const heartbeat = selectedProactive === 'no'
+      ? `# HEARTBEAT.md\n\n## Modo pasivo\n${assistantName} solo responde cuando ${name} inicia la conversación.`
+      : `# HEARTBEAT.md\n\nRevisa memory/tasks.md y memory/reminders.md.\nSi hay algo urgente o vencido, avisa brevemente en español con tono de tu personalidad.\nSi no hay nada urgente, NO mandes ningún mensaje — solo termina silenciosamente.\nNo muestres tu razonamiento. Solo el mensaje final o nada.`;
+
+    return { soul, user_md, heartbeat, assistantName, name, phone, ambassador, channels };
+  }
+
+  async function confirmAndSend() {
+    const btn = document.getElementById('confirmBtn');
+    const { soul, user_md, heartbeat, assistantName, name, phone, ambassador, channels } = generateFiles();
+
+    if (!name || name.trim().length < 2) { alert('Por favor ingresa tu nombre completo.'); return; }
+    if (!selectedTone) { alert('Por favor selecciona el tono de tu asistente (paso 3).'); return; }
+    const localNumCheck = document.getElementById('userPhoneLocal')?.value?.trim().replace(/\D/g, '') || '';
+    if (!localNumCheck || localNumCheck.length < 7) { alert('Por favor ingresa tu número de WhatsApp sin el código de país.'); return; }
+    if (!assistantName || assistantName.trim().length < 2) { alert('Por favor ponle nombre a tu asistente.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Procesando...';
+
+    try {
+
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_name: name,
+          user_phone: phone,
+          assistant_name: assistantName,
+          ambassador_code: ambassador,
+          token: window._accessToken || null,
+          soul, user_md, heartbeat
+        })
+      });
+
+      if (!res.ok) throw new Error('Error del servidor: ' + res.status);
+
+      document.getElementById('summaryScreen').classList.remove('active');
+      document.getElementById('done-name').textContent = assistantName;
+      document.getElementById('done-channel').textContent = channels || 'WhatsApp';
+      document.getElementById('doneScreen').classList.add('active');
+      document.getElementById('navStepLabel').textContent = '¡Listo!';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      spawnParticles();
+
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = 'Confirmar y activar ✦';
+      alert('Error: ' + err.message);
+    }
+  }
+
+  // ── Confetti-style CSS particles ──
+  function spawnParticles() {
+    const container = document.getElementById('doneParticles');
+    if (!container) return;
+    const colors = ['#7c3aff','#00d4ff','#a855f7','#b5ff2d','#ffffff','#c084fc'];
+    const sizes = [4, 6, 8, 5, 7];
+    const count = 60;
+
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = sizes[Math.floor(Math.random() * sizes.length)];
+      const left = Math.random() * 100;
+      const delay = Math.random() * 2.5;
+      const duration = 2.5 + Math.random() * 2;
+      const shape = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.cssText = `
+        left: ${left}%;
+        top: ${-10 + Math.random() * 30}px;
+        width: ${size}px;
+        height: ${size}px;
+        background: ${color};
+        border-radius: ${shape};
+        animation-delay: ${delay}s;
+        animation-duration: ${duration}s;
+        box-shadow: 0 0 ${size * 2}px ${color}88;
+      `;
+      container.appendChild(p);
+    }
+
+    // Second wave
+    setTimeout(() => {
+      for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = sizes[Math.floor(Math.random() * sizes.length)];
+        p.style.cssText = `
+          left: ${Math.random() * 100}%;
+          top: 0px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${color};
+          border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+          animation-delay: ${Math.random() * 1.5}s;
+          animation-duration: ${2 + Math.random() * 2.5}s;
+          box-shadow: 0 0 ${size * 2}px ${color}88;
+        `;
+        container.appendChild(p);
+      }
+    }, 1200);
+  }
+</script>
+</body>
+</html>
